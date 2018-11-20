@@ -1,5 +1,6 @@
 package de.micromata.paypal;
 
+import de.micromata.paypal.data.AccessTokenResponse;
 import de.micromata.paypal.data.PaymentExecuted;
 import de.micromata.paypal.data.PaymentCreated;
 import de.micromata.paypal.data.Payment;
@@ -9,17 +10,12 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Provides PayPal calls and transforms requests and responses to Java POJO's.
  */
 public class PayPalConnector {
     private static Logger log = LoggerFactory.getLogger(PayPalConnector.class);
-
-    // "access_token":"<access token>"
-    private static Pattern PATTERN_ACCESS_TOKEN = Pattern.compile("\"access_token\":\"([^\"]*)\"");
 
     /**
      * Create a payment in PayPal and get the information from PayPal including the redirect url for th user.
@@ -80,24 +76,25 @@ public class PayPalConnector {
      * You may use the returned access token for doing PayPal calls inside your web pages.
      * <br/>
      * Please, never ever use the PayPal credentials (client_id and secret) directly in your web pages.
+     * <br/>
+     * The returned AccessToken is valid for e. g. 9h. During this time you will receive the same token from PayPal if you try to get
+     * an access token again.
+     * <br/>
      * curl - v https:api.sandbox.paypal.com/v1/oauth2/token -H "Accept: application/json" -H "Accept-Language: en_US"
      * -u "<client_id>:<secret>" -d "grant_type=client_credentials"
+     * <br/>
+     * Todo: You should refresh tokens x seconds before expiration:
+     * https://developer.paypal.com/docs/integration/paypal-here/merchant-onboarding/permissions/#permissions-for-transaction-processing
      */
-    public static String getAccessToken(PayPalConfig config) throws PayPalRestException {
+    public static AccessTokenResponse getAccessToken(PayPalConfig config) throws PayPalRestException {
         try {
             String url = getUrl(config, "/v1/oauth2/token");
             HttpsCall call = new HttpsCall().setAcceptLanguage("en_US").setAccept(HttpsCall.MimeType.JSON);
             call.setUserPasswordAuthorization(config.getClientId() + ":" + config.getClientSecret());
             String response = call.post(url, "grant_type=client_credentials");
-            // "access_token":"<access token>"
-            Matcher matcher = PATTERN_ACCESS_TOKEN.matcher(response);
-            if (!matcher.find()) {
-                log.error("Can't get access token from server: " + response);
-                throw new PayPalRestException("Can't get access token from server: " + response);
-            }
-            String accessToken = matcher.group(1);
-            if (log.isDebugEnabled()) log.debug("Access token: " + accessToken);
-            return accessToken;
+            AccessTokenResponse accessTokenResponse = JsonUtils.fromJson(AccessTokenResponse.class, response);
+            accessTokenResponse.setOrigninalPayPalResponse(response);
+            return accessTokenResponse;
         } catch (Exception ex) {
             throw new PayPalRestException("Error while creating payment.", ex);
         }

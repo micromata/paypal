@@ -2,6 +2,7 @@ paypal-core/build
 paypal-core/out/
 paypal-server/build
 paypal-server/out/
+tmp
 
 .gradle
 

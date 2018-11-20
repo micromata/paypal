@@ -1,6 +1,7 @@
 package de.micromata.paypal;
 
 import de.micromata.paypal.data.*;
+import de.micromata.paypal.json.JsonUtils;
 
 import java.io.File;
 
@@ -9,12 +10,12 @@ public class PayPalConnectorTester {
     public static void main(String[] args) throws Exception {
         File file = new File(System.getProperty("user.home"), ".paypal");
         PayPalConfig config = new PayPalConfig().read(file);
-        //getAccessToken(config);
+        getAccessToken(config);
         createPayment(config);
     }
 
     private static void getAccessToken(PayPalConfig config) throws Exception {
-        System.out.println(PayPalConnector.getAccessToken(config));
+        System.out.println(JsonUtils.toJson(PayPalConnector.getAccessToken(config), true));
     }
 
     private static void createPayment(PayPalConfig config) throws Exception {
