@@ -1,0 +1,6 @@
+rootProject.name = 'paypal-parent'
+include 'paypal-core'
+include 'paypal-server'
+
+startParameter.excludedTaskNames << ':paypal-server:distTar'
+

@@ -1,0 +1,89 @@
+plugins {
+    id 'com.gradle.build-scan' version '1.16'
+}
+
+allprojects {
+    apply plugin: 'maven'
+
+    group = 'de.micromata.paypal'
+    version = '0.11-SNAPSHOT'
+}
+
+subprojects {
+    apply plugin: 'java'
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << '-Xlint:unchecked'
+        options.deprecation = true
+        options.encoding = 'UTF-8'
+    }
+
+    repositories {
+        maven { url "http://repo.maven.apache.org/maven2" }
+        maven { url "http://maven.ej-technologies.com/repository" }
+    }
+
+    dependencies {
+        compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+        testCompile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
+        testImplementation(
+                'org.junit.jupiter:junit-jupiter-api:5.3.0'
+        )
+        testRuntimeOnly(
+                'org.junit.jupiter:junit-jupiter-engine:5.3.0',
+                'org.junit.vintage:junit-vintage-engine:5.3.0'
+        )
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    /*
+    tasks.withType(Test) {
+        testLogging {
+            // set options for log level LIFECYCLE
+            events TestLogEvent.FAILED,
+                    TestLogEvent.PASSED,
+                    TestLogEvent.SKIPPED,
+                    TestLogEvent.STANDARD_OUT
+            exceptionFormat TestExceptionFormat.FULL
+            showExceptions true
+            showCauses true
+            showStackTraces true
+
+            // set options for log level DEBUG and INFO
+            debug {
+                events TestLogEvent.STARTED,
+                        TestLogEvent.FAILED,
+                        TestLogEvent.PASSED,
+                        TestLogEvent.SKIPPED,
+                        TestLogEvent.STANDARD_ERROR,
+                        TestLogEvent.STANDARD_OUT
+                exceptionFormat TestExceptionFormat.FULL
+            }
+            info.events = debug.events
+            info.exceptionFormat = debug.exceptionFormat
+
+            afterSuite { desc, result ->
+                if (!desc.parent) { // will match the outermost suite
+                    def output = "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
+                    def startItem = '|  ', endItem = '  |'
+                    def repeatLength = startItem.length() + output.length() + endItem.length()
+                    println('\n' + ('-' * repeatLength) + '\n' + startItem + output + endItem + '\n' + ('-' * repeatLength))
+                }
+            }
+        }
+    }*/
+}
+
+buildScan {
+    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+    termsOfServiceAgree = 'yes'
+}
+
+wrapper {
+    gradleVersion = '4.10.2'
+}
