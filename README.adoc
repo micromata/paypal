@@ -12,8 +12,8 @@ ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 
 This document describes all the steps you need to integrate PayPal in your own Java application.
 
-1. `merlin-paypal` contains the core classes you need for your own PayPal integration. It's not there much magic.
-2. `merlin-paypal-server` contains a ready to run command line server for testing PayPal transactions (sandbox and live).
+1. `paypal-core` contains the core classes you need for your own PayPal integration. It's not there much magic.
+2. `paypal-server` contains a ready to run command line server for testing PayPal transactions (sandbox and live).
 It also contains two example servlets needed by PayPal to cancel or to confirm a payment.
 
 
@@ -47,12 +47,12 @@ Create a property file for testing.
 
 For now, it's enough to enter the `client_id` and the `secret` you get from the previous step.
 
-.~/.merlin-paypal
+.~/.paypal
 ----
 paypal.client_id=<YOUR APPLICATION CLIENT ID>
 paypal.secret=<YOUR APPLICATION CLIENT SECRET>
 ----
-You may name this file `.merlin-paypal` and place it in your user home directory. The Merlin server will detect this file
+You may name this file `.paypal` and place it in your user home directory. The PayPal server will detect this file
 automatically. You may alternatively define any other filename and specify this filename with the command line option.
 
 === Step 3: Create PayPal sandbox account
@@ -73,15 +73,15 @@ You may give the optional program arguments `-f <config-file>` (see above).
 
 ==== Starting the server from your command line
 1. Run `gradle distZip` for a ready to run server (including Unix, MacOS and Windows start scripts).
-2. Unpack the zip file (located in `merlin-paypal-server/build/distributions/`)
-3. Start the server in your terminal: `bin/merlin-paypal-server` or `bin/merlin-paypal-server -f <configfile>`
+2. Unpack the zip file (located in `paypal-server/build/distributions/`)
+3. Start the server in your terminal: `bin/paypal-server` or `bin/paypal-server -f <configfile>`
 4. Open your web browser: `http://localhost:8142`.
 
 === Step 5: Run the server on a public available host
 If you run the PayPal-Server on a private host, you will be redirected to PayPal but you can't receive any call back by PayPal. For a complete testing you should
 run PayPal-Server on a public available host. Please configure the urls in the configuration file by adding the following lines:
 
-.~/.merlin-paypal
+.~/.paypal
 ----
 ...
 # The urls for the PayPal test server running on ip 159.69.120.42
@@ -92,7 +92,7 @@ paypal.cancel_url=http://159.69.120.42:8142/cancelPayment
 === Step 6: Do live tests
 After successfully testing against PayPal's sandbox your may want to connect to the real world by adding the following lines:
 
-.~/.merlin-paypal
+.~/.paypal
 ----
 # Supported modes are sandbox (default) and live:
 paypal.mode=live
@@ -102,7 +102,7 @@ Don't forget to replace the values `paypal.client-id` and `paypal.secret` by the
 
 A final live complete configuration looks like:
 
-.~/.merlin-paypal
+.~/.paypal
 ----
 # Supported modes are sandbox (default) and live:
 paypal.mode=live
@@ -117,7 +117,7 @@ paypal.cancel_url=http://159.69.120.42:8142/cancelPayment
 [NOTE]
 ====
 For dealing with both configurations (sandbox and live) on the same system, create both configuration files and
-work e. g. with symbolic links you can easily switch: `ln -s .merlin-paypal-sandbox .merlin-paypal`
+work e. g. with symbolic links you can easily switch: `ln -s .paypal-sandbox .paypal`
 ====
 
 == Writing your own app
@@ -163,7 +163,7 @@ This PayPal library supports chaining for creating objects and setting propertie
 ====
 
 ==== Step 2: Add the call-backs for PayPal after the user's payment process
-See `PaymentReceiveServlet` and `PaymentCancelServlet` of module merlin-paypal-server as an example and configure these both
+See `PaymentReceiveServlet` and `PaymentCancelServlet` of module paypal-server as an example and configure these both
 urls in your PayPalConfig. +
 (You may overwrite these default urls for every single payment, if you need payment or user specific return urls.)
 

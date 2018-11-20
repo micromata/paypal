@@ -48,10 +48,10 @@ public class PayPalMain {
             if (line.hasOption('f')) {
                 file = new File(line.getOptionValue('f'));
             } else {
-                file = new File(System.getProperty("user.home"), ".merlin-paypal");
+                file = new File(System.getProperty("user.home"), ".paypal");
             }
             if (!file.exists()) {
-                System.err.println("Please specify properties file with paypal paypalConfig or create this: " + file.getAbsolutePath());
+                System.err.println("Please specify properties file with option -f <config-file> or create this: " + file.getAbsolutePath());
                 printPropertiesExampleFile();
                 return;
             }
@@ -90,13 +90,13 @@ public class PayPalMain {
             }
             shutdownInProgress = true;
         }
-        log.info("Shutting down Merlin paypal server...");
+        log.info("Shutting down Micromata PayPal server...");
         server.stop();
     }
 
     private void printHelp(Options options) {
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp("merlin-paypal-main", options);
+        formatter.printHelp("paypal-server", options);
     }
 
     private void printPropertiesExampleFile() {

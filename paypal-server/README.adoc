@@ -8,9 +8,7 @@ Micromata GmbH, Kai Reinhard, Version {version}
 
 ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 
-== PayPal integration
-
-Please refer module `merlin-paypal` for a more detailed documentation including a step-by-step guide.
+== PayPal server
 
 === Configuration
 Create the PayPal default configuration file in your home directory. +
@@ -19,7 +17,7 @@ file by starting the server with the command line option `f <config-file>`.
 
 The example provides a configuration file for the server ip `159.69.120.42`.
 
-.~/.merlin-paypal
+.~/.paypal
 ----
 # Supported modes are sandbox (default) and live:
 paypal.mode=sandbox
@@ -38,7 +36,7 @@ You may give the optional program arguments `-f <config-file>` (see above).
 
 ==== Starting the server from your command line
 1. Run `gradle distZip` for a ready to run server (including Unix, MacOS and Windows start scripts).
-2. Unpack the zip file (located in `merlin-paypal-server/build/distributions/`)
-3. Start the server in your terminal: `bin/merlin-paypal-server` or `bin/merlin-paypal-server -f <configfile>`
+2. Unpack the zip file (located in `paypal-server/build/distributions/`)
+3. Start the server in your terminal: `bin/paypal-server` or `bin/paypal-server -f <configfile>`
 4. Open your web browser: `http://localhost:8142`.
 

@@ -7,7 +7,7 @@ import java.io.File;
 public class PayPalConnectorTester {
 
     public static void main(String[] args) throws Exception {
-        File file = new File(System.getProperty("user.home"), ".merlin-paypal");
+        File file = new File(System.getProperty("user.home"), ".paypal");
         PayPalConfig config = new PayPalConfig().read(file);
         //getAccessToken(config);
         createPayment(config);
