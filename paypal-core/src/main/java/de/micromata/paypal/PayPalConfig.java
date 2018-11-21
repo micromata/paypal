@@ -19,6 +19,7 @@ public class PayPalConfig {
     static final String KEY_SECRET = "paypal.secret";
     static final String KEY_RETURN_URL = "paypal.return_url";
     static final String KEY_CANCEL_URL = "paypal.cancel_url";
+    static final String KEY_NO_WARRANTY_ACCEPTANCE = "paypal.no_warranty_acceptance";
     public static final String DEMO_RETURN_URL = "https://example.com/your_redirect_url.html";
     public static final String DEMO_CANCEL_URL = "https://example.com/your_cancel_url.html";
 
@@ -28,6 +29,7 @@ public class PayPalConfig {
     private String cancelUrl;
     private String defaultPayment = "paypal";
     private Mode mode = Mode.SANDBOX;
+    private String noWarrantyAcceptance;
 
     public PayPalConfig() {
     }
@@ -50,6 +52,7 @@ public class PayPalConfig {
         clientSecret = props.getProperty(KEY_SECRET);
         returnUrl = props.getProperty(KEY_RETURN_URL);
         cancelUrl = props.getProperty(KEY_CANCEL_URL);
+        noWarrantyAcceptance = props.getProperty(KEY_NO_WARRANTY_ACCEPTANCE);
         return this;
     }
 
@@ -67,6 +70,7 @@ public class PayPalConfig {
     }
 
     public String getClientSecret() {
+        checkNowWarranty();
         return clientSecret;
     }
 
@@ -77,6 +81,7 @@ public class PayPalConfig {
 
     /**
      * This default return url is used if not explicitly set.
+     *
      * @return The default return url used in {@link PayPalConnector#createPayment(PayPalConfig, Payment)}.
      */
     public String getReturnUrl() {
@@ -94,6 +99,7 @@ public class PayPalConfig {
 
     /**
      * This default cancel url is used if not explicitly set.
+     *
      * @return The default cancel url used in {@link PayPalConnector#createPayment(PayPalConfig, Payment)}.
      */
     public PayPalConfig setCancelUrl(String cancelUrl) {
@@ -122,6 +128,9 @@ public class PayPalConfig {
 
     public PayPalConfig setMode(Mode mode) {
         this.mode = mode;
+        if (this.mode == Mode.LIVE) {
+            log.info("******** PLEASE TAKE CARE ON USING YOUR SOFTWARE AGAINST PAYPAL'S LIVE SYSTEM *******");
+        }
         return this;
     }
 
@@ -131,4 +140,27 @@ public class PayPalConfig {
         config.setCancelUrl(DEMO_CANCEL_URL);
         return config;
     }
+
+    public void setNoWarrantyAcceptance(String noWarrantyAcceptance) {
+        this.noWarrantyAcceptance = noWarrantyAcceptance;
+    }
+
+    private void checkNowWarranty() {
+        if (this.mode == Mode.LIVE &&
+                !I_CONFIRM_THAT_I_AM_USING_THIS_SOFTWARE_ON_MY_OWN_RISK_IT_IS_AN_OPEN_SOURCE_DEMO_SOFTWARE_AS_AN_EXAMPLE_ON_HOW_TO_USE_A_PAYPAL_INTEGRATION_FOR_USAGE_I_HAVE_TO_TEST_AND_MODIFY_THIS_SOFTWARE_THERE_IS_NO_WARRANTY_GIVEN_BY_THE_DEVELOPER_OR_ASSOCIATED_COMPANIES
+                        .equals(this.noWarrantyAcceptance)) {
+            String msg = "Sorry Dude, you have to accept, that you have to use this open source software on your own risk. Refer the log files for more details.";
+            log.error("**** " + msg);
+            log.error("Please configure property '" + KEY_NO_WARRANTY_ACCEPTANCE + "' in the config file or set it directly in PayPalConfig.setNoWarrantyAcceptance(...) to the following value:");
+            log.error("No warranty value = '"
+                    + I_CONFIRM_THAT_I_AM_USING_THIS_SOFTWARE_ON_MY_OWN_RISK_IT_IS_AN_OPEN_SOURCE_DEMO_SOFTWARE_AS_AN_EXAMPLE_ON_HOW_TO_USE_A_PAYPAL_INTEGRATION_FOR_USAGE_I_HAVE_TO_TEST_AND_MODIFY_THIS_SOFTWARE_THERE_IS_NO_WARRANTY_GIVEN_BY_THE_DEVELOPER_OR_ASSOCIATED_COMPANIES
+                    + "'");
+            throw new IllegalArgumentException(msg);
+        }
+    }
+
+    public static final String I_CONFIRM_THAT_I_AM_USING_THIS_SOFTWARE_ON_MY_OWN_RISK_IT_IS_AN_OPEN_SOURCE_DEMO_SOFTWARE_AS_AN_EXAMPLE_ON_HOW_TO_USE_A_PAYPAL_INTEGRATION_FOR_USAGE_I_HAVE_TO_TEST_AND_MODIFY_THIS_SOFTWARE_THERE_IS_NO_WARRANTY_GIVEN_BY_THE_DEVELOPER_OR_ASSOCIATED_COMPANIES
+            = "I CONFIRM THAT I AM USING THIS SOFTWARE ON MY OWN RISK. "
+            + "IT IS AN OPEN SOURCE DEMO SOFTWARE AS AN EXAMPLE ON HOW TO USE A PAYPAL INTEGRATION. FOR USAGE I HAVE "
+            + "TO TEST AND MODIFY THIS SOFTWARE. THERE IS NO WARRANTY GIVEN BY THE DEVELOPER OR ASSOCIATED COMPANIES.";
 }
