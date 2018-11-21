@@ -3,6 +3,7 @@ package de.micromata.paypal.data;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.micromata.paypal.Utils;
 
+import java.beans.Transient;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -98,6 +99,11 @@ public class Transaction {
     @JsonProperty("item_list")
     public ItemList getItemList() {
         return itemList;
+    }
+
+    @Transient
+    public List<Item> getItems() {
+        return itemList.getItems();
     }
 
     /**
