@@ -114,7 +114,7 @@ paypal.no_warranty_acceptance=<Refer the log files for the value>
 [NOTE]
 ====
 The no-warranty-acceptance is required to make clear, that this Software was developed by an enthusiastic guy thrilled by passion without
-any commercial intentions. Dude, so you have to accept, that you use this Software on your own risk without any warranty.
+any commercial intentions. Dude, you have to accept, that you use this Software on your own risk without any warranty.
 This Software should help you to integrate PayPal in your own application but you have to modify and test it carefully.
 ====
 
