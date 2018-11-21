@@ -183,7 +183,7 @@ if (paymentExecuted != null) {
 }
 ----
 
-=== Misc
+=== Miscellaneous
 
 ==== anchor:get-access-token[]Get an access token
 Keep your credentials (`client_id` and `secret`) secret! Never ever include any credential value in your web page!
@@ -198,10 +198,6 @@ String accessToken = accessTokenResponse.getAccessToken();
 ----
 The object `AccessToken` holds also the expire time. An AccessToken is initially valid for 9h. If you try to get
 a new access token during this time you will receive the same token.
-
-
-==== See a live demo
-The https://demo.paypal.com/us/demo/go_platform/pcbt[demo store^] show how a modern integration should finally look like.
 
 
 ==== Why do not use BrainSDK?
