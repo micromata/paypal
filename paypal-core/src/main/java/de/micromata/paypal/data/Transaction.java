@@ -28,6 +28,16 @@ public class Transaction {
         amount = new Amount(currency);
     }
 
+
+    /**
+     * Ensures all items with the same currency. Use this constructor if your currency is not listed in the
+     * enum {@link Currency}.
+     * @param currency Each transaction needs a currency.
+     */
+    public Transaction(String currency) {
+        amount = new Amount(currency);
+    }
+
     public Item addItem(String name, BigDecimal price) {
         Item item = new Item().setPrice(price).setName(name);
         itemList.add(item);
