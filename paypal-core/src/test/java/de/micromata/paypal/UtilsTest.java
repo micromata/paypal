@@ -13,6 +13,7 @@ class UtilsTest {
         assertEquals("1", Utils.ensureMaxLength("1", 5));
         assertEquals("12345", Utils.ensureMaxLength("12345", 5));
         assertEquals("12...", Utils.ensureMaxLength("123456", 5));
+        assertEquals("12...", Utils.ensureMaxLength("1234567890", 5));
     }
 
     @Test

@@ -55,6 +55,6 @@ public class Utils {
         if (value == null || value.length() <= length || value.length() < 3) {
             return value;
         }
-        return value.substring(0, value.length() - 4) + abbrevMarker;
+        return value.substring(0, length - 3) + abbrevMarker;
     }
 }
