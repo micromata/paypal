@@ -20,6 +20,16 @@ public class Payment {
     private ApplicationContext applicationContext;
     private RedirectUrls redirectUrls = new RedirectUrls();
 
+    public Payment() {
+    }
+
+    /**
+     * Creates a payment with this transaction. You may add more transactions by calling {@link #addTransaction(Transaction)}.
+     * @param transaction
+     */
+    public Payment(Transaction transaction) {
+        addTransaction(transaction);
+    }
     /**
      * Default is "sale".
      */
@@ -47,6 +57,7 @@ public class Payment {
 
     /**
      * Ensures max length 165: https://developer.paypal.com/docs/api/payments/v1/#definition-transaction
+     *
      * @param noteToPayer
      * @return
      */
@@ -63,6 +74,7 @@ public class Payment {
     /**
      * This method is automatically called by {@link PayPalConnector#createPayment(PayPalConfig, Payment)} and
      * adds the return urls for PayPal.
+     *
      * @param config
      * @return
      */
