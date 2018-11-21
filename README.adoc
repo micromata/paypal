@@ -87,7 +87,11 @@ You may give the optional program arguments `-f <config-file>` (see above).
 1. Run `gradle distZip` for a ready to run server (including Unix, MacOS and Windows start scripts).
 2. Unpack the zip file (located in `paypal-server/build/distributions/`)
 3. Start the server in your terminal: `bin/paypal-server` or `bin/paypal-server -f <configfile>`
-4. Open your web browser: `http://localhost:8142`.
+
+==== Testing PayPal transactions
+1. After starting the server:
+2. Open your web browser: `http://localhost:8142`.
+3. Create some transactions by filling out the form and test the redirect to PayPal.
 
 === Step 5: Run the server on a public available host
 If you run the PayPal-Server on a private host, you will be redirected to PayPal but you can't receive any call back by PayPal. For a complete testing you should
@@ -126,6 +130,7 @@ A final live complete configuration looks like:
 ----
 # Supported modes are sandbox (default) and live:
 paypal.mode=live
+paypal.no_warranty_acceptance=I CONFIRM...
 paypal.client_id=<your client id>
 paypal.secret=<your client secret>
 # return url called by Paypal after successful payments:
@@ -183,9 +188,7 @@ This PayPal library supports chaining for creating objects and setting propertie
 
 ==== Step 2: Add the call-backs for PayPal after the user's payment process
 See `PaymentReceiveServlet` and `PaymentCancelServlet` of module paypal-server as an example and configure these both
-urls in your PayPalConfig. +
-(You may overwrite these default urls for every single payment, if you need payment or user specific return urls.)
-
+urls in your PayPalConfig.
 
 ==== Step 3: Confirm/execute a payment
 Place this code in your servlet which PayPal calls after a user's successful payment:
@@ -216,7 +219,7 @@ temporarily valid access token for authentification:
 AccessTokenResponse accessTokenResponse = PayPalConntector.getAccessToken(payPalConfig);
 String accessToken = accessTokenResponse.getAccessToken();
 ----
-The object `AccessToken` holds also the expire time. An AccessToken is initially valid for 9h. If you try to get
+The object `AccessTokenResponse` holds also the expire time. An AccessToken is initially valid for 9h. If you try to get
 a new access token during this time you will receive the same token.
 
 
@@ -226,10 +229,10 @@ any field restrictions (such as minimum and maximum field length or supported fi
 
 If you miss some functionality feel free to extend this module. It's very easy to extend calls and POJOs.
 
-It takes only less than one day to replace BrainSDK by an own implementation for the whole payment process.
+It took only less than an effort of one day to replace BrainSDK by an own implementation for the whole payment process.
 
 === Project dependencies
-This PayPal library is designed with a minimal set of dependencies for an light weight integration in your own app:
+This PayPal library is designed with a minimal set of dependencies for a light weight integration in your own app:
 
 [%autowidth, frame="topbot",options="header"]
 |=======
