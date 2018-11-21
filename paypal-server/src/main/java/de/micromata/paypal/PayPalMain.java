@@ -1,5 +1,6 @@
 package de.micromata.paypal;
 
+import de.micromata.paypal.data.AccessTokenResponse;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,8 +64,8 @@ public class PayPalMain {
                 printPropertiesExampleFile();
             }
             if (paypalConfig.getMode() == PayPalConfig.Mode.SANDBOX) {
-                String accessToken = PayPalConnector.getAccessToken(paypalConfig);
-                log.info("Access token successfully received: " + accessToken);
+                AccessTokenResponse accessTokenResponse = PayPalConnector.getAccessToken(paypalConfig);
+                log.info("Access token successfully received: " + accessTokenResponse.getAccessToken());
             }
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 @Override
