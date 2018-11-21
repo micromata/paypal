@@ -184,8 +184,9 @@ if (paymentExecuted != null) {
 ----
 
 === Miscellaneous
+anchor:get-access-token[]
 
-==== anchor:get-access-token[]Get an access token
+==== Get an access token
 Keep your credentials (`client_id` and `secret`) secret! Never ever include any credential value in your web page!
 If you need to do a PayPal call direct inside your web page, get an access token from the server first and then use this
 temporarily valid access token for authentification:
