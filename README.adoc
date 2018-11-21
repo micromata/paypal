@@ -150,18 +150,18 @@ paypalConfig = new PayPalConfig().setClientId("<client_id>").setClientSecret("<s
 ==== Step 1: Create a payment
 [source,java]
 ----
-Payment payment = new Payment().setShipping(ShippingPreference.NO_SHIPPING);
-Transaction transaction = new Transaction(Currency.EUR);      // Every price in EUR
-transaction.addItem("Merlin software", 29.99).setTax(5.20);   // The item to sell for 29.99 EUR.
-transaction.setInoviceNumber("1234"); // Must be unique, can't be used twice.
-payment.addTransaction(transaction);  // A payment may contain multiple transactions.
-payment.setNoteToPayer("Please contact ..."); // Note to payer for important messages.
+Transaction transaction = new Transaction(Currency.EUR); // Every price in EUR
+transaction.addItem("My software", 29.99).setTax(5.20);  // Item to sell for 29.99 with optional tax.
+transaction.setInoviceNumber("1234");                    // Must be unique, can't be used twice.
+Payment payment = new Payment(transaction);              // A payment may contain multiple transactions.
+payment.setNoteToPayer("Please contact ...");            // Note to payer for important messages.
+payment.setShipping(ShippingPreference.NO_SHIPPING);     // Don`t prompt the user for a shipping address.
 // Do the PayPal call and see the returned PaymentExecution object:
 PaymentCreated paymentCreated = PayPalConnector.createPayment(paypalConfig, payment);
 String redirectUrl;
 if (paymentCreated != null) {
   redirectUrl = paymentCreated.getPayPalUrlForUserPayment();
-  response.sendRedirect(redirectUrl); // Redirect the user to the PayPal site.
+  response.sendRedirect(redirectUrl);                    // Redirect the user to the PayPal site.
 }
 ----
 `redirectUrl` contains the link where to redirect the user for proceeding with the payment. +
