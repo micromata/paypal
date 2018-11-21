@@ -183,10 +183,10 @@ if (paymentExecuted != null) {
 }
 ----
 
-=== Miscellaneous
+== Miscellaneous
 anchor:get-access-token[]
 
-==== Get an access token
+=== Get an access token
 Keep your credentials (`client_id` and `secret`) secret! Never ever include any credential value in your web page!
 If you need to do a PayPal call direct inside your web page, get an access token from the server first and then use this
 temporarily valid access token for authentification:
@@ -201,7 +201,7 @@ The object `AccessToken` holds also the expire time. An AccessToken is initially
 a new access token during this time you will receive the same token.
 
 
-==== Why do not use BrainSDK?
+=== Why do not use BrainSDK?
 The BrainSDK seems to be behind the API. I wasn't able to set the flag `NO_SHIPPING` and the BrainSDK doesn't care about
 any field restrictions (such as minimum and maximum field length or supported field values).
 
@@ -209,7 +209,7 @@ If you miss some functionality feel free to extend this module. It's very easy t
 
 It takes only less than one day to replace BrainSDK by an own implementation for the whole payment process.
 
-==== Project dependencies
+=== Project dependencies
 This PayPal library is designed with a minimal set of dependencies for an light weight integration in your own app:
 
 [%autowidth, frame="topbot",options="header"]
