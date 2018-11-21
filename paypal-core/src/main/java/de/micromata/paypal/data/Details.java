@@ -44,29 +44,23 @@ public class Details {
         return tax;
     }
 
-    /**
-     * Ensures scale 2.
-     *
-     * @param tax
-     * @return this for chaining.
-     */
-    public Details setTax(BigDecimal tax) {
-        this.tax = Utils.roundAmount(tax);
-        return this;
-    }
-
-    public Details setTax(double tax) {
-        return setTax(new BigDecimal(tax));
-    }
-
     public BigDecimal getSubtotal() {
         return subtotal;
     }
 
-    public void calculateSubtotal(Transaction transaction) {
+    /**
+     * Calculate subtotal and tax by adding all prices (prices are multiplied with quantity) and taxes of the items of
+     * the transaction this details will assigned to.
+     * @param transaction
+     */
+    public void calculate(Transaction transaction) {
         subtotal = BigDecimal.ZERO;
         for (Item item : transaction.getItemList().getItems()) {
             subtotal = Utils.add(subtotal, item.getPrice().multiply(new BigDecimal(item.getQuantity())));
+        }
+        tax = BigDecimal.ZERO;
+        for (Item item : transaction.getItemList().getItems()) {
+            tax = Utils.add(tax, item.getTax());
         }
     }
 }

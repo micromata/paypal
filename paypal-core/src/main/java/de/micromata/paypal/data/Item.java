@@ -8,6 +8,7 @@ public class Item {
     private String name;
     private int quantity = 1;
     private BigDecimal price;
+    private BigDecimal tax;
     private String currency;
 
     public String getName() {
@@ -49,6 +50,20 @@ public class Item {
 
     public Item setPrice(double price) {
         return setPrice(new BigDecimal(price));
+    }
+
+    public BigDecimal getTax() {
+        return tax;
+    }
+
+
+    public Item setTax(BigDecimal tax) {
+        this.tax = Utils.roundAmount(tax);
+        return this;
+    }
+
+    public Item setTax(double tax) {
+        return setTax(new BigDecimal(tax));
     }
 
     public String getCurrency() {

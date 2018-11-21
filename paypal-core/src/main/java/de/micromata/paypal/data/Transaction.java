@@ -15,16 +15,17 @@ public class Transaction {
     private List<RelatedResource> relatedResources;
 
     /**
-     * Amount class is created and assigned to this transaction.
-     *
-     * @param currency
-     * @param details
-     * @return
+     * Needed for json deserialization.
      */
-    public Transaction createAmount(Currency currency, Details details) {
+    Transaction() {
+    }
+
+    /**
+     * Ensures all items with the same currency.
+     * @param currency Each transaction needs a currency.
+     */
+    public Transaction(Currency currency) {
         amount = new Amount(currency);
-        amount.setDetails(details);
-        return this;
     }
 
     public Item addItem(String name, BigDecimal price) {
@@ -105,5 +106,18 @@ public class Transaction {
     @JsonProperty(value = "related_resources")
     public List<RelatedResource> getRelatedResources() {
         return relatedResources;
+    }
+
+    /**
+     * Calls {@link Details#calculate(Transaction)} with this transaction and sets the currency
+     * of all containes items (uses the amount's currency).
+     */
+    public void calculate() {
+        amount.getDetails().calculate(this);
+        String currency = amount.getCurrency();
+        for (Item item : itemList.getItems()) {
+            item.setCurrency(currency);
+        }
+
     }
 }

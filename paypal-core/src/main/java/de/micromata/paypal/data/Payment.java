@@ -76,11 +76,7 @@ public class Payment {
      */
     public void recalculate() {
         for (Transaction transaction : transactions) {
-            transaction.getAmount().getDetails().calculateSubtotal(transaction);
-            String currency = transaction.getAmount().getCurrency();
-            for (Item item : transaction.getItemList().getItems()) {
-                item.setCurrency(currency);
-            }
+            transaction.calculate();
         }
     }
 

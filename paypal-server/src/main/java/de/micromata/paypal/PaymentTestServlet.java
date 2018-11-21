@@ -53,11 +53,8 @@ public class PaymentTestServlet extends HttpServlet {
 
 
         Payment payment = new Payment().setConfig(paypalConfig);
-        Transaction transaction = new Transaction().setDescription(description);
-        transaction.addItem(itemDescription, price);
-        Details details = new Details();
-        details.setTax(tax);
-        transaction.createAmount(Currency.EUR, details);
+        Transaction transaction = new Transaction(Currency.EUR).setDescription(description);
+        transaction.addItem(itemDescription, price).setTax(tax);
         payment.addTransaction(transaction);
         if (Utils.isNotBlank(noteToPayer)) {
             payment.setNoteToPayer(noteToPayer);

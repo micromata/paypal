@@ -4,10 +4,10 @@ import java.math.BigDecimal;
 
 public class Amount {
     private String currency;
-    private Details details;
+    private Details details = new Details();
 
     public Amount() {
-        currency = "USD";
+        currency = Currency.USD.name();
     }
 
     public Amount(String currency) {
@@ -18,13 +18,13 @@ public class Amount {
         setCurrency(currency);
     }
 
+    /**
+     * The details object is automatically created and should be calculated by
+     * {@link Transaction#calculate()}
+     * @return
+     */
     public Details getDetails() {
         return details;
-    }
-
-    public Amount setDetails(Details details) {
-        this.details = details;
-        return this;
     }
 
     public BigDecimal getTotal() {

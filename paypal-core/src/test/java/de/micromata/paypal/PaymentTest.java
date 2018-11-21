@@ -15,13 +15,11 @@ class PaymentTest {
     void paymentTest() {
         PayPalConfig config = PayPalConfig.createDemoConfig();
         Payment payment = new Payment();
-        Transaction transaction = new Transaction();
+        Transaction transaction = new Transaction(Currency.EUR);
         transaction.setInoviceNumber(generateString(200));
         assertEquals(127, transaction.getInoviceNumber().length());
         assertEquals(generateString(124) + "...", transaction.getInoviceNumber());
-        transaction.addItem("Online Elections 2019", 29.99);
-        Details details = new Details().setTax(5.70);
-        transaction.createAmount(Currency.EUR, details);
+        transaction.addItem("Online Elections 2019", 29.99).setTax(5.70);
         payment.addTransaction(transaction).setNoteToPayer("Enjoy your Elections with POLYAS.");
         payment.setConfig(config);
         payment.recalculate();

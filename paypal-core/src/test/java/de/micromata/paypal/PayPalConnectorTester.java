@@ -20,11 +20,8 @@ public class PayPalConnectorTester {
 
     private static void createPayment(PayPalConfig config) throws Exception {
         Payment payment = new Payment().setConfig(config);
-        Transaction transaction = new Transaction();
-        transaction.addItem("Online Elections 2019", 29.99);
-        Details details = new Details();
-        details.setTax(5.70);
-        transaction.createAmount(Currency.EUR, details);
+        Transaction transaction = new Transaction(Currency.EUR);
+        transaction.addItem("Online Elections 2019", 29.99).setTax(5.70);
         transaction.setInoviceNumber("1234");
         payment.addTransaction(transaction).setNoteToPayer("Enjoy your Elections with POLYAS.");
         //System.out.println(JsonUtils.toJson(payment, true));
