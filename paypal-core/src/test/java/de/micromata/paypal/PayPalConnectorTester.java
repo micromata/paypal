@@ -14,17 +14,7 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PayPalConnectorTester {
-    private static Logger log = LoggerFactory.getLogger(PayPalConnectorTester.class);
-
-    public static void main(String[] args) throws Exception {
-        PayPalConnectorTester tester = new PayPalConnectorTester();
-        PayPalConfig config = tester.getConfig();
-        if (config == null) {
-            return;
-        }
-        tester.getAccessToken(config);
-        tester.createPayment(config);
-    }
+    private Logger log = LoggerFactory.getLogger(PayPalConnectorTester.class);
 
     private PayPalConfig getConfig() throws IOException {
         File file = new File(System.getProperty("user.home"), ".paypal");
