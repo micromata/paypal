@@ -155,7 +155,7 @@ transaction.addItem("My software", 29.99).setTax(5.20);  // Item to sell for 29.
 transaction.setInoviceNumber("1234");                    // Must be unique, can't be used twice.
 Payment payment = new Payment(transaction);              // A payment may contain multiple transactions.
 payment.setNoteToPayer("Please contact ...");            // Note to payer for important messages.
-payment.setShipping(ShippingPreference.NO_SHIPPING);     // Don`t prompt the user for a shipping address.
+payment.setShipping(ShippingPreference.NO_SHIPPING);     // Don't prompt the user for a shipping address.
 // Do the PayPal call and see the returned PaymentExecution object:
 PaymentCreated paymentCreated = PayPalConnector.createPayment(paypalConfig, payment);
 String redirectUrl;
