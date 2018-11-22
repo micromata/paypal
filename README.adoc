@@ -162,7 +162,7 @@ PayPalConfig payPalConfig = new PayPalConfig()
 Or load the properties from a properties file:
 [source,java]
 ----
-File configFile = new File(...);
+File configFile = new File(System.getProperty("user.home"), ".paypal");
 paypalConfig = new PayPalConfig().read(file);
 ----
 
