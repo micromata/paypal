@@ -34,7 +34,16 @@ public class Item {
         return quantity;
     }
 
+    /**
+     *
+     * @param quantity
+     * @return this for chaining.
+     * @throws IllegalArgumentException if the given quantity is zero or negative.
+     */
     public Item setQuantity(int quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Quantity of item can't be zero or negative.");
+        }
         this.quantity = quantity;
         return this;
     }
@@ -43,11 +52,22 @@ public class Item {
         return price;
     }
 
+    /**
+     * Set net price and ensures a BigDecimal value with scale 2.
+     * @param price Net price.
+     * @return this for chaining.
+     */
     public Item setPrice(BigDecimal price) {
         this.price = Utils.roundAmount(price);
         return this;
     }
 
+    /**
+     *
+     * @param price Net price
+     * @return this for chaining.
+     * Calls {@link #setPrice(BigDecimal)}
+     */
     public Item setPrice(double price) {
         return setPrice(new BigDecimal(price));
     }
@@ -56,14 +76,45 @@ public class Item {
         return tax;
     }
 
-
+    /**
+     * Additional tax to the net price.
+     * @param tax
+     * @return this for chaining.
+     * Calls {@link #addTax(BigDecimal)}
+     */
     public Item setTax(BigDecimal tax) {
+        return addTax(tax);
+    }
+
+    /**
+     * Ensures a BigDecimal value with scale 2.
+     * @param tax
+     * @return this for chaining.
+     */
+    public Item addTax(BigDecimal tax) {
         this.tax = Utils.roundAmount(tax);
         return this;
     }
 
+    /**
+     * Additional tax to the net price.
+     * @param tax
+     * @return this for chaining.
+     * Calls {@link #addTax(double)}
+     */
     public Item setTax(double tax) {
-        return setTax(new BigDecimal(tax));
+
+        return addTax(tax);
+    }
+
+    /**
+     * Adds tax amount.
+     * @param tax
+     * @return this for chaining.
+     * Calls {@link #addTax(BigDecimal)}
+     */
+    public Item addTax(double tax) {
+        return addTax(new BigDecimal(tax));
     }
 
     public String getCurrency() {
