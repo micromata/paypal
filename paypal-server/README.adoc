@@ -37,6 +37,10 @@ You may give the optional program arguments `-f <config-file>` (see above).
 ==== Starting the server from your command line
 1. Run `gradle distZip` for a ready to run server (including Unix, MacOS and Windows start scripts).
 2. Unpack the zip file (located in `paypal-server/build/distributions/`)
-3. Start the server in your terminal: `bin/paypal-server` or `bin/paypal-server -f <configfile>`
-4. Open your web browser: `http://localhost:8142`.
+3. Start the server in your terminal: `bin/paypal-server` or `bin/paypal-server -f <config file>`
 
+
+==== Testing PayPal transactions
+1. After starting the server:
+2. Open your web browser: `http://localhost:8142`.
+3. Create some transactions by filling out the form and test the redirect to PayPal.

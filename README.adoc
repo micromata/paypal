@@ -13,7 +13,7 @@ ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 This document describes all the steps you need to integrate PayPal payments in your own Java application.
 
 1. `paypal-core` contains the core classes you need for your own PayPal integration. It's not there much magic.
-2. `paypal-server` contains a ready to run command line server for testing PayPal transactions (sandbox and live).
+2. `paypal-server` contains a ready to run command line server including a simple web form for testing PayPal transactions (sandbox and live).
 It also contains two example servlets needed by PayPal to cancel or to confirm a payment.
 
 In the end, it's so simple:
@@ -86,7 +86,7 @@ You may give the optional program arguments `-f <config-file>` (see above).
 ==== Starting the server from your command line
 1. Run `gradle distZip` for a ready to run server (including Unix, MacOS and Windows start scripts).
 2. Unpack the zip file (located in `paypal-server/build/distributions/`)
-3. Start the server in your terminal: `bin/paypal-server` or `bin/paypal-server -f <configfile>`
+3. Start the server in your terminal: `bin/paypal-server` or `bin/paypal-server -f <config file>`
 
 ==== Testing PayPal transactions
 1. After starting the server:
@@ -153,9 +153,17 @@ You may use the PayPal configuration file from above or alternatively it's also 
 the config stuff in the Java code yourself.
 [source,java]
 ----
-paypalConfig = new PayPalConfig().setClientId("<client_id>").setClientSecret("<secret>")
+PayPalConfig payPalConfig = new PayPalConfig()
+  .setClientId("<client_id>").setClientSecret("<secret>")
   .setReturnUrl("<return url>").setCancelUrl("<cancel url>")
   .setMode(PayPalConfig.Mode.SANDBOX);
+----
+
+Or load the properties from a properties file:
+[source,java]
+----
+File configFile = new File(...);
+paypalConfig = new PayPalConfig().read(file);
 ----
 
 === Java code for payments
@@ -164,7 +172,7 @@ paypalConfig = new PayPalConfig().setClientId("<client_id>").setClientSecret("<s
 [source,java]
 ----
 Transaction transaction = new Transaction(Currency.EUR); // Every price in EUR
-transaction.addItem("My software", 29.99).setTax(5.20);  // Item to sell for 29.99 with optional tax.
+transaction.addItem("My software", 29.99).setTax(5.20);  // Item to sell for 29.99 plus optional tax.
 transaction.setInoviceNumber("1234");                    // Must be unique, can't be used twice.
 Payment payment = new Payment(transaction);              // A payment has transaction(s).
 payment.setNoteToPayer("Please contact ...");            // Note to payer for important messages.
