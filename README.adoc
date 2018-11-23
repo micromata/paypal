@@ -94,7 +94,7 @@ You may give the optional program arguments `-f <config-file>` (see above).
 3. Create some transactions by filling out the form and test the redirect to PayPal.
 
 === Step 5: Run the server on a public available host
-If you run the PayPal-Server on a private host, you will be redirected to PayPal but you can't receive any call back by PayPal. For a complete testing you should
+If you run the PayPal-Server on a private host, you will be redirected to PayPal but you can't receive any call back from PayPal. For a complete testing you should
 run PayPal-Server on a public available host. Please configure the urls in the configuration file by adding the following lines:
 
 .~/.paypal
