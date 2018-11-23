@@ -1,6 +1,6 @@
-Micromata PayPal
-================
-Micromata GmbH, Kai Reinhard, Version {version}
+PayPal JAVA Integration
+=======================
+Kai Reinhard, Version {version}
 :toc:
 :toclevels: 4
 
