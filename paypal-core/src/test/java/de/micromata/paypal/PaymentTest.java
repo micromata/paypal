@@ -12,12 +12,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class PaymentTest {
     private static Logger log = LoggerFactory.getLogger(PaymentTest.class);
 
     @Test
-    void serializationTest() throws IOException {
+    void paymentCreatedSerializationTest() throws IOException {
         String content = new String(Files.readAllBytes(Paths.get("test-data", "payment-created.json")));
         Payment payment = JsonUtils.fromJson(Payment.class, content);
         assertEquals("PAY-1XN596375S038633ELP4TDNQ", payment.getId());
@@ -33,8 +34,48 @@ class PaymentTest {
         assertEquals("Enjoy your Elections with POLYAS.", payment.getNoteToPayer());
         assertEquals("2018-11-24T11:10:45Z", payment.getCreateTime());
 
-        testItem(transaction.getItems().get(0), "Online Elections 2019", "29.99", Currency.EUR,"5.70", 1);
-        testItem(transaction.getItems().get(1), "Logo", "1.00", Currency.EUR,"0.19", 1);
+        assertEquals(2, transaction.getItems().size());
+        testItem(transaction.getItems().get(0), "Online Elections 2019", "29.99", Currency.EUR, "5.70", 1);
+        testItem(transaction.getItems().get(1), "Logo", "1.00", Currency.EUR, "0.19", 1);
+
+        assertEquals("https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=EC-0LG63851YH496714A", payment.getPayPalApprovalUrl());
+    }
+
+    @Test
+    void paymentApprovedSerializationTest() throws IOException {
+        String content = new String(Files.readAllBytes(Paths.get("test-data", "payment-approved.json")));
+        Payment payment = JsonUtils.fromJson(Payment.class, content);
+        assertEquals("PAY-6MT6019334734810GLP2QJOI", payment.getId());
+        assertEquals(State.APPROVED, payment.getState());
+        Transaction transaction = payment.getTransactions().get(0);
+        Amount amount = transaction.getAmount();
+        assertEquals("29.99", amount.getTotal().toString());
+        assertEquals(Currency.EUR.name(), amount.getCurrency());
+        assertEquals("Merlin Online Solutions", transaction.getDescription());
+        Details details = amount.getDetails();
+        assertEquals("29.99", details.getSubtotal().toString());
+        assertEquals("0.00", details.getTax().toString());
+        assertNull(details.getShipping());
+        assertNull(payment.getNoteToPayer());
+        assertEquals("2018-11-21T07:10:04Z", payment.getCreateTime());
+
+        assertEquals(1, transaction.getItems().size());
+        testItem(transaction.getItems().get(0), "Elections 2019", "29.99", Currency.EUR, "0.00", 1);
+
+        assertEquals("7H166117V65459919", payment.getCart());
+        Payer payer = payment.getPayer();
+        assertEquals("VERIFIED", payer.getStatus());
+        assertEquals("paypal", payer.getPaymentMethod());
+        PayerInfo payerInfo = payer.getPayerInfo();
+        assertEquals("test-buyer@acme.com", payerInfo.getEmail());
+        assertEquals("test", payerInfo.getFirstName());
+        assertEquals("buyer", payerInfo.getLastName());
+        assertEquals("9KV4FWVA79N94", payerInfo.getPayerId());
+        assertEquals("DE", payerInfo.getCountryCode());
+
+        Payee payee = transaction.getPayee();
+        assertEquals("admin-facilitator@acme.de", payee.getEmail());
+        assertEquals("LKHIUL76E", payee.getMerchantId());
     }
 
     @Test
