@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Base64;
 
@@ -17,24 +16,38 @@ import java.util.Base64;
 public class HttpsCall {
     private static Logger log = LoggerFactory.getLogger(HttpsCall.class);
 
-    public enum MimeType {JSON}
-
     private String authorization;
     private String acceptLanguage;
     private MimeType contentType;
     private MimeType accept;
 
     /**
+     * @param urlString   Https url to connect (including any get parameter).
+     * @return The result from the remote server.
+     */
+    public String get(String urlString) throws IOException {
+        return execute(urlString, null, "GET");
+    }
+
+    /**
      * @param urlString Https url to connect.
      * @param input     The post input.
      * @return The result from the remote server.
      */
-    public String post(String urlString, String input) throws MalformedURLException, IOException {
+    public String post(String urlString, String input) throws IOException {
+        return execute(urlString, input, "POST");
+    }
+
+    /**
+     * @param urlString Https url to connect.
+     * @param input     The post input.
+     * @return The result from the remote server.
+     */
+    private String execute(String urlString, String input, String requestMethod) throws IOException {
         if (log.isDebugEnabled()) log.debug("Call '" + urlString + "' with input: " + input);
         URL url = new URL(urlString);
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-        conn.setDoOutput(true);
-        conn.setRequestMethod("POST");
+        conn.setRequestMethod(requestMethod);
         if (authorization != null) {
             conn.setRequestProperty("Authorization", authorization);
         }
@@ -44,15 +57,18 @@ public class HttpsCall {
         }
         if (contentType != null) {
             if (log.isDebugEnabled()) log.debug("Content-Type: application/json");
-            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Content-Type", contentType.asString());
         }
         if (accept != null) {
             if (log.isDebugEnabled()) log.debug("Accept: application/json");
-            conn.setRequestProperty("Accept", "application/json");
+            conn.setRequestProperty("Accept", accept.asString());
         }
-        OutputStream os = conn.getOutputStream();
-        os.write(input.getBytes());
-        os.flush();
+        if (input != null) {
+            conn.setDoOutput(true);
+            OutputStream os = conn.getOutputStream();
+            os.write(input.getBytes());
+            os.flush();
+        }
         if (conn.getResponseCode() != HttpURLConnection.HTTP_CREATED &&
                 conn.getResponseCode() != HttpsURLConnection.HTTP_OK) {
             throw new RuntimeException("Failed : HTTP error code : "

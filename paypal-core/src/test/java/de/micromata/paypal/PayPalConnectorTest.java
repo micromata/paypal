@@ -39,7 +39,23 @@ public class PayPalConnectorTest {
         if (config == null) {
             return;
         }
-        createPayment(config);
+        //createPayment(config);
+    }
+
+    @Test
+    void getPaymentsTest() throws IOException, PayPalRestException {
+        PayPalConfig config = getConfig();
+        if (config == null) {
+            return;
+        }
+        PaymentRequestFilter filter = new PaymentRequestFilter();
+        Payments payments = PayPalConnector.listPayments(config, filter);
+        if (payments.getPayments() != null && payments.getPayments().size() > 0) {
+            Payment payment1 = payments.getPayments().get(0);
+            String paymentId = payment1.getId();
+            Payment payment2 = PayPalConnector.getPaymentDetails(config, paymentId);
+            assertEquals(payment1.getId(), payment2.getId());
+        }
     }
 
     private void getAccessToken(PayPalConfig config) throws PayPalRestException {

@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class Payment {
     private String intent = "sale";
-    private String id, stateString, cart, createTime;
+    private String id, stateString, cart, createTime, updateTime, failureReason, experienceProfileId;
     private Payer payer = new Payer();
     private List<Transaction> transactions = new ArrayList<>();
     private String noteToPayer;
@@ -71,6 +71,11 @@ public class Payment {
     @JsonProperty(value = "create_time")
     public String getCreateTime() {
         return createTime;
+    }
+
+    @JsonProperty(value = "update_time")
+    public String getUpdateTime() {
+        return updateTime;
     }
 
     public List<Link> getLinks() {
@@ -179,5 +184,15 @@ public class Payment {
             }
         }
         return null;
+    }
+
+    @JsonProperty(value = "failure_reason")
+    public String getFailureReason() {
+        return failureReason;
+    }
+
+    @JsonProperty(value = "experience_profile_id")
+    public String getExperienceProfileId() {
+        return experienceProfileId;
     }
 }

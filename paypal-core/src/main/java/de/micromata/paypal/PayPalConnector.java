@@ -2,6 +2,7 @@ package de.micromata.paypal;
 
 import de.micromata.paypal.data.AccessTokenResponse;
 import de.micromata.paypal.data.Payment;
+import de.micromata.paypal.data.Payments;
 import de.micromata.paypal.json.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,7 @@ public class PayPalConnector {
             payment.setConfig(config);
             payment.recalculate();
             log.info("Create payment: " + JsonUtils.toJson(payment));
-            String response = executeCall(config, url, JsonUtils.toJson(payment));
+            String response = doPostCall(config, url, JsonUtils.toJson(payment));
             Payment paymentCreated = JsonUtils.fromJson(Payment.class, response);
             if (paymentCreated == null) {
                 throw new PayPalRestException("Error while creating payment: " + response);
@@ -39,7 +40,7 @@ public class PayPalConnector {
             log.info("Created execution payment: " + JsonUtils.toJson(paymentCreated));
             return paymentCreated;
         } catch (Exception ex) {
-            throw new PayPalRestException("Error while creating payment.", ex);
+            throw new PayPalRestException("Error while creating payment: " + ex.getMessage(), ex);
         }
     }
 
@@ -48,11 +49,47 @@ public class PayPalConnector {
      * @param paymentId
      * @return
      */
-    public static Payment getPaymentDetails(PayPalConfig config, String paymentId) {
-        // GET request
-        // /v1/payments/payment/{payment_id}
-        String url = getUrl(config, "/v1/payments/payment/" + paymentId);
-        return null;
+    public static Payment getPaymentDetails(PayPalConfig config, String paymentId) throws PayPalRestException {
+        try {
+            // GET request
+            // /v1/payments/payment/{payment_id}
+            String url = getUrl(config, "/v1/payments/payment/" + paymentId);
+            log.info("Get payment with paymentId=" + paymentId);
+            String response = doGetCall(config, url);
+            Payment payment = JsonUtils.fromJson(Payment.class, response);
+            return payment;
+        } catch (Exception ex) {
+            throw new PayPalRestException("Error while getting payment details: " + ex.getMessage(), ex);
+        }
+    }
+
+    /**
+     * @param config
+     * @param filter
+     * @return
+     */
+    public static Payments listPayments(PayPalConfig config, PaymentRequestFilter filter) throws PayPalRestException {
+        try {
+            // GET request
+            // /v1/payments/payment
+            String url = getUrl(config, "/v1/payments/payment");
+            log.info("Get payments: filter=" + JsonUtils.toJson(filter));
+            HttpsCallRequestParamBuilder pb = new HttpsCallRequestParamBuilder();
+            pb.add("count", filter.getCount())
+                    .add("start_id", filter.getStartId())
+                    .add("start_index", filter.getStartIndex())
+                    .add("start_time", filter.getStartTime())
+                    .add("end_time", filter.getEndTime())
+                    .add("payee_id", filter.getPayeeId())
+                    .add("sort_by", filter.getSortBy())
+                    .add("sort_order", filter.getSortOrder());
+            String response = doGetCall(config, pb.createUrl(url));
+            if (log.isDebugEnabled()) log.debug("Response: " + response);
+            Payments payments = JsonUtils.fromJson(Payments.class, response);
+            return payments;
+        } catch (Exception ex) {
+            throw new PayPalRestException("Error while getting list of payments: " + ex.getMessage(), ex);
+        }
     }
 
     /**
@@ -69,8 +106,8 @@ public class PayPalConnector {
             String url = getUrl(config, "/v1/payments/payment/" + paymentId + "/execute");
             log.info("Approve payment: paymentId=" + paymentId + ", payerId=" + payerId);
             String payload = "{\"payer_id\" : \"" + payerId + "\"}";
-            String response = executeCall(config, url, payload);
-            if (log.isDebugEnabled()) log.info("Response: " + response);
+            String response = doPostCall(config, url, payload);
+            if (log.isDebugEnabled()) log.debug("Response: " + response);
             Payment approval = JsonUtils.fromJson(Payment.class, response);
             if (approval == null) {
                 throw new PayPalRestException("Error while creating payment: " + response);
@@ -79,7 +116,7 @@ public class PayPalConnector {
             log.info("Payment approved: " + JsonUtils.toJson(approval));
             return approval;
         } catch (Exception ex) {
-            throw new PayPalRestException("Error while creating payment.", ex);
+            throw new PayPalRestException("Error while creating payment: " + ex.getMessage(), ex);
         }
     }
 
@@ -100,31 +137,45 @@ public class PayPalConnector {
     public static AccessTokenResponse getAccessToken(PayPalConfig config) throws PayPalRestException {
         try {
             String url = getUrl(config, "/v1/oauth2/token");
-            HttpsCall call = new HttpsCall().setAcceptLanguage("en_US").setAccept(HttpsCall.MimeType.JSON);
+            HttpsCall call = new HttpsCall().setAcceptLanguage("en_US").setAccept(MimeType.JSON);
             call.setUserPasswordAuthorization(config.getClientId() + ":" + config.getClientSecret());
             String response = call.post(url, "grant_type=client_credentials");
             AccessTokenResponse accessTokenResponse = JsonUtils.fromJson(AccessTokenResponse.class, response);
             accessTokenResponse.setOrigninalPayPalResponse(response);
             return accessTokenResponse;
         } catch (Exception ex) {
-            throw new PayPalRestException("Error while creating payment.", ex);
+            throw new PayPalRestException("Error while getting access token: " + ex.getMessage(), ex);
         }
     }
 
 
-    private static String executeCall(PayPalConfig config, String url, String payload) throws IOException, MalformedURLException {
-        return executeCall(config, url, payload, null);
+    private static String doPostCall(PayPalConfig config, String url, String payload) throws IOException, MalformedURLException {
+        return doPostCall(config, url, payload, null);
     }
 
-    private static String executeCall(PayPalConfig config, String url, String payload, String accessToken) throws IOException, MalformedURLException {
-        HttpsCall call = new HttpsCall().setAcceptLanguage("en_US").setAccept(HttpsCall.MimeType.JSON);
+    private static String doPostCall(PayPalConfig config, String url, String payload, String accessToken) throws IOException, MalformedURLException {
+        HttpsCall call = createCallObject(config, accessToken);
+        call.setContentType(MimeType.JSON);
+        return call.post(url, payload);
+    }
+
+    private static String doGetCall(PayPalConfig config, String url) throws IOException, MalformedURLException {
+        return doGetCall(config, url, null);
+    }
+
+    private static String doGetCall(PayPalConfig config, String url, String accessToken) throws IOException, MalformedURLException {
+        HttpsCall call = createCallObject(config, accessToken);
+        return call.get(url);
+    }
+
+    private static HttpsCall createCallObject(PayPalConfig config, String accessToken) {
+        HttpsCall call = new HttpsCall().setAcceptLanguage("en_US").setAccept(MimeType.JSON);
         if (accessToken != null) {
             call.setBearerAuthorization(accessToken);
         } else {
             call.setUserPasswordAuthorization(config.getClientId() + ":" + config.getClientSecret());
         }
-        call.setContentType(HttpsCall.MimeType.JSON);
-        return call.post(url, payload);
+        return call;
     }
 
     private static String getUrl(PayPalConfig config, String url) {

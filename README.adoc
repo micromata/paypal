@@ -213,6 +213,38 @@ if (paymentExecuted != null) {
 }
 ----
 
+== Further Java functionality
+=== List of payments
+You may get a list of payments with pagination, see https://developer.paypal.com/docs/api/payments/v1/#payment_list.
+
+[source,java]
+----
+PaymentRequestFilter filter = new PaymentRequestFilter();
+Payments payments = PayPalConnector.listPayments(config, filter);
+...
+----
+Optional you may filter your payments by setting the desired fields of the `filter` object.
+
+=== Recovering payment processes
+1. Store the payment id you get on the initial creation of a payment.
+2. You may query this payment by this id later for detecting the state of this payment and to continue the next required
+step:
+
+[source,java]
+----
+Payment payment = PayPalConnector.getPaymentDetails(config, paymentId);
+if (payment.getState() == State.CREATED) {
+  // Redirect the user to PayPal's payment process.
+} else if (payment.getState() == State.APPROVED) {
+  // Payment is approved by the user. If not yet executed, try to execute this payment (again):
+  PayPalConnector.executePayment(config, paymentId, payerId);
+} else if (payment.getState() == State.FAILED) {
+  // We have to re-create a new payment, if the user still wants to pay.
+}
+----
+
+
+
 == Miscellaneous
 anchor:get-access-token[]
 
