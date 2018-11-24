@@ -1,8 +1,6 @@
 package de.micromata.paypal;
 
 import de.micromata.paypal.data.AccessTokenResponse;
-import de.micromata.paypal.data.PaymentExecuted;
-import de.micromata.paypal.data.PaymentCreated;
 import de.micromata.paypal.data.Payment;
 import de.micromata.paypal.json.JsonUtils;
 import org.slf4j.Logger;
@@ -25,42 +23,55 @@ public class PayPalConnector {
      * @return the created payment understood, processed and returned by PayPal.
      * @throws PayPalRestException
      */
-    public static PaymentCreated createPayment(PayPalConfig config, Payment payment) throws PayPalRestException {
+    public static Payment createPayment(PayPalConfig config, Payment payment) throws PayPalRestException {
         try {
+            // Post
             String url = getUrl(config, "/v1/payments/payment");
             payment.setConfig(config);
             payment.recalculate();
             log.info("Create payment: " + JsonUtils.toJson(payment));
             String response = executeCall(config, url, JsonUtils.toJson(payment));
-            PaymentCreated executionPayment = JsonUtils.fromJson(PaymentCreated.class, response);
-            if (executionPayment == null) {
+            Payment paymentCreated = JsonUtils.fromJson(Payment.class, response);
+            if (paymentCreated == null) {
                 throw new PayPalRestException("Error while creating payment: " + response);
             }
-            executionPayment.setOrigninalPayPalResponse(response);
-            log.info("Created execution payment: " + JsonUtils.toJson(executionPayment));
-            return executionPayment;
+            paymentCreated.setOrigninalPayPalResponse(response);
+            log.info("Created execution payment: " + JsonUtils.toJson(paymentCreated));
+            return paymentCreated;
         } catch (Exception ex) {
             throw new PayPalRestException("Error while creating payment.", ex);
         }
     }
 
     /**
+     * @param config
+     * @param paymentId
+     * @return
+     */
+    public static Payment getPaymentDetails(PayPalConfig config, String paymentId) {
+        // GET request
+        // /v1/payments/payment/{payment_id}
+        String url = getUrl(config, "/v1/payments/payment/" + paymentId);
+        return null;
+    }
+
+    /**
      * After finishing the payment by the user on the PayPal site, we have to execute this payment as a last step.
      *
      * @param config
-     * @param payementId
+     * @param paymentId
      * @param payerId
      * @return The returned PaymentExecuted contain everything related to this payment, such as id, payer, refund urls etc.
      * @throws PayPalRestException
      */
-    public static PaymentExecuted executePayment(PayPalConfig config, String payementId, String payerId) throws PayPalRestException {
+    public static Payment executePayment(PayPalConfig config, String paymentId, String payerId) throws PayPalRestException {
         try {
-            String url = getUrl(config, "/v1/payments/payment/" + payementId + "/execute");
-            log.info("Approve payment: paymentId=" + payementId + ", payerId=" + payerId);
+            String url = getUrl(config, "/v1/payments/payment/" + paymentId + "/execute");
+            log.info("Approve payment: paymentId=" + paymentId + ", payerId=" + payerId);
             String payload = "{\"payer_id\" : \"" + payerId + "\"}";
             String response = executeCall(config, url, payload);
             if (log.isDebugEnabled()) log.info("Response: " + response);
-            PaymentExecuted approval = JsonUtils.fromJson(PaymentExecuted.class, response);
+            Payment approval = JsonUtils.fromJson(Payment.class, response);
             if (approval == null) {
                 throw new PayPalRestException("Error while creating payment: " + response);
             }

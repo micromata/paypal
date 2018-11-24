@@ -6,10 +6,36 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PaymentTest {
     private static Logger log = LoggerFactory.getLogger(PaymentTest.class);
+
+    @Test
+    void serializationTest() throws IOException {
+        String content = new String(Files.readAllBytes(Paths.get("test-data", "payment-created.json")));
+        Payment payment = JsonUtils.fromJson(Payment.class, content);
+        assertEquals("PAY-1XN596375S038633ELP4TDNQ", payment.getId());
+        assertEquals(State.CREATED, payment.getState());
+        Transaction transaction = payment.getTransactions().get(0);
+        Amount amount = transaction.getAmount();
+        assertEquals("40.87", amount.getTotal().toString());
+        assertEquals(Currency.EUR.name(), amount.getCurrency());
+        Details details = amount.getDetails();
+        assertEquals("30.99", details.getSubtotal().toString());
+        assertEquals("5.89", details.getTax().toString());
+        assertEquals("3.99", details.getShipping().toString());
+        assertEquals("Enjoy your Elections with POLYAS.", payment.getNoteToPayer());
+        assertEquals("2018-11-24T11:10:45Z", payment.getCreateTime());
+
+        testItem(transaction.getItems().get(0), "Online Elections 2019", "29.99", Currency.EUR,"5.70", 1);
+        testItem(transaction.getItems().get(1), "Logo", "1.00", Currency.EUR,"0.19", 1);
+    }
 
     @Test
     void paymentTest() {
@@ -45,5 +71,13 @@ class PaymentTest {
             sb.append(i % 10);
         }
         return sb.toString();
+    }
+
+    private void testItem(Item item, String name, String price, Currency currency, String tax, int quantity) {
+        assertEquals(name, item.getName());
+        assertEquals(price, item.getPrice().toString());
+        assertEquals(currency.name(), item.getCurrency());
+        assertEquals(tax, item.getTax().toString());
+        assertEquals(quantity, item.getQuantity());
     }
 }

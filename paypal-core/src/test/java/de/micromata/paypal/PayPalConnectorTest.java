@@ -8,13 +8,12 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class PayPalConnectorTester {
-    private Logger log = LoggerFactory.getLogger(PayPalConnectorTester.class);
+public class PayPalConnectorTest {
+    private Logger log = LoggerFactory.getLogger(PayPalConnectorTest.class);
 
     private PayPalConfig getConfig() throws IOException {
         File file = new File(System.getProperty("user.home"), ".paypal");
@@ -56,9 +55,9 @@ public class PayPalConnectorTester {
         transaction.setInoviceNumber(invoiceNumber);
         Payment payment = new Payment(transaction).setNoteToPayer("Enjoy your Elections with POLYAS.");
         //log.info(JsonUtils.toJson(payment, true));
-        PaymentCreated paymentExecution = PayPalConnector.createPayment(config, payment);
-        assertEquals(1, paymentExecution.getTransactions().size());
-        transaction = paymentExecution.getTransactions().get(0);
+        Payment paymentCreated = PayPalConnector.createPayment(config, payment);
+        assertEquals(1, paymentCreated.getTransactions().size());
+        transaction = paymentCreated.getTransactions().get(0);
         assertEquals(invoiceNumber, transaction.getInoviceNumber());
 
         assertEquals("40.87", transaction.getAmount().getTotal().toString());

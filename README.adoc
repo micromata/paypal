@@ -24,7 +24,7 @@ Transaction transaction = new Transaction(Currency.EUR);      // Every price in 
 transaction.addItem("Merlin software", 29.99).addTax(5.20);   // The item to sell for 29.99 EUR.
 Payment = new Payment(transaction);
 // Do the PayPal call and see the returned PaymentExecution object:
-PaymentCreated paymentCreated = PayPalConnector.createPayment(paypalConfig, payment);
+Payment paymentCreated = PayPalConnector.createPayment(paypalConfig, payment);
 ----
 
 Now you've already created an PayPal payment in PayPal. Refer <<writing-your-own-app>> for a step-by-step guide for your own application.
@@ -178,7 +178,7 @@ Payment payment = new Payment(transaction);              // A payment has transa
 payment.setNoteToPayer("Please contact ...");            // Note to payer for important messages.
 payment.setShipping(ShippingPreference.NO_SHIPPING);     // Don't prompt the user for a shipping address.
 // Do the PayPal call and see the returned PaymentExecution object:
-PaymentCreated paymentCreated = PayPalConnector.createPayment(paypalConfig, payment);
+Payment paymentCreated = PayPalConnector.createPayment(paypalConfig, payment);
 if (paymentCreated != null) {
   String redirectUrl = paymentCreated.getPayPalUrlForUserPayment();
   response.sendRedirect(redirectUrl);                    // Redirect the user to the PayPal site.
@@ -206,7 +206,7 @@ Place this code in your servlet which PayPal calls after a user's successful pay
 ----
 String paymentId = request.getParameter("paymentId"); // Request parameter given by PayPal
 String payerId = request.getParameter("PayerID");
-PaymentExecuted paymentExecuted = PayPalConnector.executePayment(config, paymentId, payerId);
+Payment paymentExecuted = PayPalConnector.executePayment(config, paymentId, payerId);
 if (paymentExecuted != null) {
   // paymentExecuted contains all information related to the PayPal payment:
   // payer, transaction, items, amounts, refund urls, time stamps etc.

@@ -1,0 +1,60 @@
+{
+  "id": "PAY-1XN596375S038633ELP4TDNQ",
+  "intent": "sale",
+  "state": "created",
+  "payer": {
+    "payment_method": "paypal"
+  },
+  "transactions": [
+    {
+      "amount": {
+        "total": "40.87",
+        "currency": "EUR",
+        "details": {
+          "subtotal": "30.99",
+          "tax": "5.89",
+          "shipping": "3.99"
+        }
+      },
+      "invoice_number": "I--1295663880",
+      "item_list": {
+        "items": [
+          {
+            "name": "Online Elections 2019",
+            "price": "29.99",
+            "currency": "EUR",
+            "tax": "5.70",
+            "quantity": 1
+          },
+          {
+            "name": "Logo",
+            "price": "1.00",
+            "currency": "EUR",
+            "tax": "0.19",
+            "quantity": 1
+          }
+        ]
+      },
+      "related_resources": []
+    }
+  ],
+  "note_to_payer": "Enjoy your Elections with POLYAS.",
+  "create_time": "2018-11-24T11:10:45Z",
+  "links": [
+    {
+      "href": "https://api.sandbox.paypal.com/v1/payments/payment/PAY-1XN596375S038633ELP4TDNQ",
+      "rel": "self",
+      "method": "GET"
+    },
+    {
+      "href": "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=EC-0LG63851YH496714A",
+      "rel": "approval_url",
+      "method": "REDIRECT"
+    },
+    {
+      "href": "https://api.sandbox.paypal.com/v1/payments/payment/PAY-1XN596375S038633ELP4TDNQ/execute",
+      "rel": "execute",
+      "method": "POST"
+    }
+  ]
+}

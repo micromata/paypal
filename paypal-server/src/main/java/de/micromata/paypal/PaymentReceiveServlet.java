@@ -1,6 +1,6 @@
 package de.micromata.paypal;
 
-import de.micromata.paypal.data.PaymentExecuted;
+import de.micromata.paypal.data.Payment;
 import de.micromata.paypal.json.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +68,7 @@ public class PaymentReceiveServlet extends HttpServlet {
             redirectToErrorPage(resp);
             return;
         }
-        PaymentExecuted paymentExecuted = PayPalConnector.executePayment(config, paymentId, payerId);
+        Payment paymentExecuted = PayPalConnector.executePayment(config, paymentId, payerId);
         if (paymentExecuted != null) {
             log.info("Payment executed: " + JsonUtils.toJson(paymentExecuted));
             resp.setStatus(302);
