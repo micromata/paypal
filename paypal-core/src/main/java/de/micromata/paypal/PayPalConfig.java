@@ -50,8 +50,12 @@ public class PayPalConfig {
         }
         clientId = props.getProperty(KEY_CLIENT_ID);
         clientSecret = props.getProperty(KEY_SECRET);
-        returnUrl = props.getProperty(KEY_RETURN_URL);
-        cancelUrl = props.getProperty(KEY_CANCEL_URL);
+        String prop = props.getProperty(KEY_RETURN_URL);
+        if (Utils.isNotBlank(prop))
+            returnUrl = prop;
+        prop = props.getProperty(KEY_CANCEL_URL);
+        if (Utils.isNotBlank(prop))
+            cancelUrl = prop;
         noWarrantyAcceptance = props.getProperty(KEY_NO_WARRANTY_ACCEPTANCE);
         return this;
     }
