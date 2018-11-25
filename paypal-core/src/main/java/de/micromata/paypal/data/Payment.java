@@ -29,7 +29,7 @@ public class Payment {
     /**
      * Creates a payment with this transaction. You may add more transactions by calling {@link #addTransaction(Transaction)}.
      *
-     * @param transaction
+     * @param transaction transaction to add.
      */
     public Payment(Transaction transaction) {
         addTransaction(transaction);
@@ -84,6 +84,7 @@ public class Payment {
 
     /**
      * Default is "sale".
+     * @return intent of payment.
      */
     public String getIntent() {
         return intent;
@@ -110,8 +111,8 @@ public class Payment {
     /**
      * Ensures max length 165: https://developer.paypal.com/docs/api/payments/v1/#definition-transaction
      *
-     * @param noteToPayer
-     * @return
+     * @param noteToPayer Important not to the payer shown on the PayPal site.
+     * @return this for chaining.
      */
     public Payment setNoteToPayer(String noteToPayer) {
         this.noteToPayer = Utils.ensureMaxLength(noteToPayer, 165);
@@ -127,8 +128,9 @@ public class Payment {
      * This method is automatically called by {@link PayPalConnector#createPayment(PayPalConfig, Payment)} and
      * adds the return urls for PayPal.
      *
-     * @param config
-     * @return
+     * @param config config needed for setting redirectUrls if not already set.
+     * @return this for chaining.
+     * @see RedirectUrls#setConfig(PayPalConfig)
      */
     public Payment setConfig(PayPalConfig config) {
         redirectUrls.setConfig(config);

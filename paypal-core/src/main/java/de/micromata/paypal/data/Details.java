@@ -28,7 +28,7 @@ public class Details {
     /**
      * Ensures scale 2.
      *
-     * @param shipping
+     * @param shipping additional shipping amount.
      * @return this for chaining.
      */
     public Details setShipping(BigDecimal shipping) {
@@ -51,7 +51,7 @@ public class Details {
     /**
      * Calculate subtotal and tax by adding all prices (prices are multiplied with quantity) and taxes of the items of
      * the transaction this details will assigned to.
-     * @param transaction
+     * @param transaction transaction is needed for calculating the totals.
      */
     public void calculate(Transaction transaction) {
         subtotal = BigDecimal.ZERO;

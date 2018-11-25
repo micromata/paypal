@@ -21,7 +21,7 @@ public class Amount {
     /**
      * The details object is automatically created and should be calculated by
      * {@link Transaction#calculate()}
-     * @return
+     * @return details
      */
     public Details getDetails() {
         return details;
@@ -40,7 +40,7 @@ public class Amount {
 
     /**
      * Ensures 3 character value: https://developer.paypal.com/docs/api/payments/v1/#definition-amount
-     * @param currency
+     * @param currency The currency as string (3 chars).
      */
     public void setCurrency(String currency) {
         if (currency.length() != 3) {

@@ -3,11 +3,10 @@ package de.micromata.paypal.data;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.beans.Transient;
-import java.util.Date;
 
 /**
  * If you need to do direct PayPal calls inside your web page code, don't use the credentials (client_id and secret)!!!!!!!!
- * <br/>
+ * <br>
  * This AccessToken is valid for e. g. 9h. During this time you will receive the same token from PayPal if you try to get
  * an access token again.
  */
@@ -24,7 +23,7 @@ public class AccessTokenResponse {
     /**
      * Example: "https://uri.paypal.com/services/disputes/read-seller https://api.paypal.com/v1/payments/.* https://uri.paypal.com/services/applications/webhooks openid https://uri.paypal.com/services/disputes/update-seller",
      *
-     * @return
+     * @return scope
      */
     public String getScope() {
         return scope;
@@ -33,7 +32,7 @@ public class AccessTokenResponse {
     /**
      * Example: "2018-11-20T23:04:52ZiZy....M",
      *
-     * @return
+     * @return nonce
      */
     public String getNonce() {
         return nonce;
@@ -55,7 +54,7 @@ public class AccessTokenResponse {
     /**
      * Example: "APP-..."
      *
-     * @return
+     * @return app id
      */
     @JsonProperty(value = "app_id")
     public String getAppId() {
@@ -64,9 +63,9 @@ public class AccessTokenResponse {
 
     /**
      * Expires in 32400 (9h) on initial call (if no valid access token is available).
-     * <br/>
+     * <br>
      * This is the value returned by PayPal and will not be updated!
-     * <br/>
+     * <br>
      * To get the current seconds this token will expire, please call {@link #getExpiresIn()}.
      *
      * @return Expires in seconds given by PayPal on request.

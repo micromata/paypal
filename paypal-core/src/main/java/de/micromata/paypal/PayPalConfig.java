@@ -65,7 +65,7 @@ public class PayPalConfig {
     }
 
     /**
-     * @param clientId
+     * @param clientId The client id (part of PayPal credentials)
      * @return this for chaining.
      */
     public PayPalConfig setClientId(String clientId) {
@@ -104,7 +104,8 @@ public class PayPalConfig {
     /**
      * This default cancel url is used if not explicitly set.
      *
-     * @return The default cancel url used in {@link PayPalConnector#createPayment(PayPalConfig, Payment)}.
+     * @param cancelUrl The cancel url used in {@link PayPalConnector#createPayment(PayPalConfig, Payment)}.
+     * @return this for chaining.
      */
     public PayPalConfig setCancelUrl(String cancelUrl) {
         this.cancelUrl = cancelUrl;

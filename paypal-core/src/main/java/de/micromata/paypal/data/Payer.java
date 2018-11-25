@@ -12,7 +12,7 @@ public class Payer {
     /**
      * Default is "paypal".
      *
-     * @return
+     * @return the payment method.
      */
     @JsonProperty(value = "payment_method")
     public String getPaymentMethod() {

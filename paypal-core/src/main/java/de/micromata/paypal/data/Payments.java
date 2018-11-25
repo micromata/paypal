@@ -28,8 +28,7 @@ public class Payments {
     }
 
     /**
-     * @return
-     * the ID of the element to use to get the next range of results.<br/>
+     * @return the ID of the element to use to get the next range of results.<br>
      * Read only.
      */
     public String getNextId() {

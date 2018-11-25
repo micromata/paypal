@@ -22,10 +22,10 @@ public class PayPalConnector {
     /**
      * Create a payment in PayPal and get the information from PayPal including the redirect url for th user.
      *
-     * @param config
-     * @param payment
+     * @param config config contains the PayPal credentials and return urls.
+     * @param payment payment to publish / create.
      * @return the created payment understood, processed and returned by PayPal.
-     * @throws PayPalRestException
+     * @throws PayPalRestException Will be thrown if any exception occurs.
      */
     public static Payment createPayment(PayPalConfig config, Payment payment) throws PayPalRestException {
         try {
@@ -48,9 +48,10 @@ public class PayPalConnector {
     }
 
     /**
-     * @param config
-     * @param paymentId
-     * @return
+     * @param config config contains the required PayPal credentials.
+     * @param paymentId id of the payment to query.
+     * @return The payment returned by PayPal, if found.
+     * @throws PayPalRestException Will be thrown if any exception occurs.
      */
     public static Payment getPaymentDetails(PayPalConfig config, String paymentId) throws PayPalRestException {
         try {
@@ -67,9 +68,10 @@ public class PayPalConnector {
     }
 
     /**
-     * @param config
-     * @param filter
-     * @return
+     * @param config config with PayPal credentials.
+     * @param filter Query filter (can be empty or null).
+     * @return All the payments found and returned by PayPal.
+     * @throws PayPalRestException Will be thrown if any exception occurs.
      */
     public static Payments listPayments(PayPalConfig config, PaymentRequestFilter filter) throws PayPalRestException {
         try {
@@ -78,14 +80,16 @@ public class PayPalConnector {
             String url = getUrl(config, "/v1/payments/payment");
             log.info("Get payments: filter=" + JsonUtils.toJson(filter));
             QueryParamBuilder pb = new QueryParamBuilder();
-            pb.add("count", filter.getCount())
-                    .add("start_id", filter.getStartId())
-                    .add("start_index", filter.getStartIndex())
-                    .add("start_time", filter.getStartTime())
-                    .add("end_time", filter.getEndTime())
-                    .add("payee_id", filter.getPayeeId())
-                    .add("sort_by", filter.getSortBy())
-                    .add("sort_order", filter.getSortOrder());
+            if (filter != null) {
+                pb.add("count", filter.getCount())
+                        .add("start_id", filter.getStartId())
+                        .add("start_index", filter.getStartIndex())
+                        .add("start_time", filter.getStartTime())
+                        .add("end_time", filter.getEndTime())
+                        .add("payee_id", filter.getPayeeId())
+                        .add("sort_by", filter.getSortBy())
+                        .add("sort_order", filter.getSortOrder());
+            }
             String response = doGetCall(config, pb.createUrl(url));
             if (log.isDebugEnabled()) log.debug("Response: " + response);
             Payments payments = JsonUtils.fromJson(Payments.class, response);
@@ -98,11 +102,11 @@ public class PayPalConnector {
     /**
      * After finishing the payment by the user on the PayPal site, we have to execute this payment as a last step.
      *
-     * @param config
-     * @param paymentId
-     * @param payerId
+     * @param config needed for PayPal credentials.
+     * @param paymentId the payment id of the payment to execute.
+     * @param payerId the id of the payer approved the payment.
      * @return The returned PaymentExecuted contain everything related to this payment, such as id, payer, refund urls etc.
-     * @throws PayPalRestException
+     * @throws PayPalRestException Will be thrown if any exception occurs.
      */
     public static Payment executePayment(PayPalConfig config, String paymentId, String payerId) throws PayPalRestException {
         try {
@@ -125,17 +129,20 @@ public class PayPalConnector {
 
     /**
      * You may use the returned access token for doing PayPal calls inside your web pages.
-     * <br/>
+     * <br>
      * Please, never ever use the PayPal credentials (client_id and secret) directly in your web pages.
-     * <br/>
+     * <br>
      * The returned AccessToken is valid for e. g. 9h. During this time you will receive the same token from PayPal if you try to get
      * an access token again.
-     * <br/>
+     * <br>
      * curl - v https:api.sandbox.paypal.com/v1/oauth2/token -H "Accept: application/json" -H "Accept-Language: en_US"
-     * -u "<client_id>:<secret>" -d "grant_type=client_credentials"
-     * <br/>
+     * -u "&lt;client_id&gt;:&lt;secret&gt;" -d "grant_type=client_credentials"
+     * <br>
      * Todo: You should refresh tokens x seconds before expiration:
      * https://developer.paypal.com/docs/integration/paypal-here/merchant-onboarding/permissions/#permissions-for-transaction-processing
+     * @param config config with PayPal credentials.
+     * @return AccessTokenResponse containing token and expire time.
+     * @throws PayPalRestException Will be thrown if any exception occurs.
      */
     public static AccessTokenResponse getAccessToken(PayPalConfig config) throws PayPalRestException {
         try {

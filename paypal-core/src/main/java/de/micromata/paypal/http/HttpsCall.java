@@ -24,6 +24,7 @@ public class HttpsCall {
     /**
      * @param urlString   Https url to connect (including any get parameter).
      * @return The result from the remote server.
+     * @throws IOException ...
      */
     public String get(String urlString) throws IOException {
         return execute(urlString, null, "GET");
@@ -33,6 +34,7 @@ public class HttpsCall {
      * @param urlString Https url to connect.
      * @param input     The post input.
      * @return The result from the remote server.
+     * @throws IOException ...
      */
     public String post(String urlString, String input) throws IOException {
         return execute(urlString, input, "POST");
@@ -42,6 +44,7 @@ public class HttpsCall {
      * @param urlString Https url to connect.
      * @param input     The post input.
      * @return The result from the remote server.
+     * @throws IOException ...
      */
     private String execute(String urlString, String input, String requestMethod) throws IOException {
         if (log.isDebugEnabled()) log.debug("Call '" + urlString + "' with input: " + input);

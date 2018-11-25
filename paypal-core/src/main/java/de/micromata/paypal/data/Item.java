@@ -17,8 +17,8 @@ public class Item {
 
     /**
      * Ensures maximum length of 127: https://developer.paypal.com/docs/api/payments/v1/#definition-item
-     * @param name
-     * @return
+     * @param name name of item
+     * @return this for chaining.
      */
     public Item setName(String name) {
         this.name = Utils.ensureMaxLength(name, 127);
@@ -28,7 +28,7 @@ public class Item {
     /**
      * Defaut is 1.
      *
-     * @return
+     * @return quantity of this item
      */
     public int getQuantity() {
         return quantity;
@@ -36,7 +36,7 @@ public class Item {
 
     /**
      *
-     * @param quantity
+     * @param quantity quantity of this item
      * @return this for chaining.
      * @throws IllegalArgumentException if the given quantity is zero or negative.
      */
@@ -78,7 +78,7 @@ public class Item {
 
     /**
      * Additional tax to the net price.
-     * @param tax
+     * @param tax additional tax amount
      * @return this for chaining.
      * Calls {@link #addTax(BigDecimal)}
      */
@@ -88,7 +88,7 @@ public class Item {
 
     /**
      * Ensures a BigDecimal value with scale 2.
-     * @param tax
+     * @param tax additional tax amount
      * @return this for chaining.
      */
     public Item addTax(BigDecimal tax) {
@@ -98,7 +98,7 @@ public class Item {
 
     /**
      * Additional tax to the net price.
-     * @param tax
+     * @param tax additional tax amount
      * @return this for chaining.
      * Calls {@link #addTax(double)}
      */
@@ -109,7 +109,7 @@ public class Item {
 
     /**
      * Adds tax amount.
-     * @param tax
+     * @param tax additional tax amount
      * @return this for chaining.
      * Calls {@link #addTax(BigDecimal)}
      */

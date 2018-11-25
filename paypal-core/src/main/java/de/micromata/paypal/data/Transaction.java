@@ -57,7 +57,7 @@ public class Transaction {
 
     /**
      *
-     * @param amount
+     * @param amount amount to set.
      * @return this for chaining.
      */
     public Transaction setAmount(Amount amount) {
@@ -73,7 +73,7 @@ public class Transaction {
     /**
      * Ensures maximum length of 127: https://developer.paypal.com/docs/api/payments/v1/#definition-transaction
      *
-     * @param inoviceNumber
+     * @param inoviceNumber invoice number
      * @return this for chaining.
      */
     public Transaction setInoviceNumber(String inoviceNumber) {
@@ -88,7 +88,7 @@ public class Transaction {
     /**
      * Ensures maximum length of 127: https://developer.paypal.com/docs/api/payments/v1/#definition-transaction
      *
-     * @param description
+     * @param description description
      * @return this for chaining.
      */
     public Transaction setDescription(String description) {
@@ -107,7 +107,7 @@ public class Transaction {
     }
 
     /**
-     * @param itemList
+     * @param itemList item list
      * @return this for chaining.
      */
     public Transaction setItemList(ItemList itemList) {

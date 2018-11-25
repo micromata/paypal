@@ -22,7 +22,7 @@ public class ShippingAddress {
     /**
      * Ensures maximum length of 100: https://developer.paypal.com/docs/api/payments/v1/#definition-shipping_address
      *
-     * @param line1
+     * @param line1 line 1 of address.
      */
     public void setLine1(String line1) {
         this.line1 = Utils.ensureMaxLength(line1, 100);
@@ -35,7 +35,7 @@ public class ShippingAddress {
     /**
      * Ensures maximum length of 100: https://developer.paypal.com/docs/api/payments/v1/#definition-shipping_address
      *
-     * @param line2
+     * @param line2 line 2 of address.
      */
     public void setLine2(String line2) {
         this.line2 = Utils.ensureMaxLength(line2, 100);
@@ -48,7 +48,7 @@ public class ShippingAddress {
     /**
      * Ensures maximum length of 64: https://developer.paypal.com/docs/api/payments/v1/#definition-shipping_address
      *
-     * @param city
+     * @param city city of address.
      */
     public void setCity(String city) {
         this.city = Utils.ensureMaxLength(city, 64);
@@ -61,7 +61,7 @@ public class ShippingAddress {
     /**
      * Ensures maximum length of 40: https://developer.paypal.com/docs/api/payments/v1/#definition-shipping_address
      *
-     * @param state
+     * @param state state of address.
      */
     public void setState(String state) {
         this.state = Utils.ensureMaxLength(state, 40);
@@ -84,7 +84,7 @@ public class ShippingAddress {
     /**
      * two-character ISO 3166-1 code: https://developer.paypal.com/docs/api/payments/v1/#definition-shipping_address.
      *
-     * @param countryCode
+     * @param countryCode country code of address.
      */
     public void setCountryCode(String countryCode) {
         if (countryCode.length() != 2) {

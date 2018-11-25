@@ -9,6 +9,7 @@ public class Utils {
      * Ensures scale 2.
      *
      * @param amount Round this amount.
+     * @return the rounded amount.
      */
     public static BigDecimal roundAmount(BigDecimal amount) {
         if (amount == null) {
@@ -20,8 +21,8 @@ public class Utils {
     /**
      * Doesn't round.
      *
-     * @param values
-     * @return
+     * @param values The values to add (null values supported).
+     * @return The sum of all values or null if no non-null value found.
      */
     public static BigDecimal add(BigDecimal... values) {
         BigDecimal sum = null;

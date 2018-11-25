@@ -20,9 +20,9 @@ public class JsonUtils {
     }
 
     /**
-     * @param obj
+     * @param obj The object to serialize.
      * @param prettyPrinter If true, the json output will be pretty printed (human readable with new lines and indenting).
-     * @return
+     * @return The serialized string (json representation of the given object).
      */
     public static String toJson(Object obj, boolean prettyPrinter) {
         if (obj == null) {

@@ -13,7 +13,7 @@ public class PayerInfo {
 
     /**
      * Ensures maximum length of 127: https://developer.paypal.com/docs/api/payments/v1/#definition-payer_info
-     * @param email
+     * @param email e-mail address of the payer.
      */
     public void setEmail(String email) {
         this.email = Utils.ensureMaxLength(email, 127);

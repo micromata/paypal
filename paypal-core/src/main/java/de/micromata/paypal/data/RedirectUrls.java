@@ -14,8 +14,8 @@ public class RedirectUrls {
      * Sets the return an cancel ur, if not already set. If one of the values is already set the set
      * value will not be overwritten.
      *
-     * @param config
-     * @return
+     * @param config config with redirect urls.
+     * @return this for chaining.
      */
     public RedirectUrls setConfig(PayPalConfig config) {
         boolean warningShown = false;
@@ -52,7 +52,7 @@ public class RedirectUrls {
     /**
      * You may overwrite the default return url of {@link PayPalConfig}.
      *
-     * @param returnUrl
+     * @param returnUrl the url published to PayPal for call-back.
      * @return this for chaining.
      */
     public RedirectUrls setReturnUrl(String returnUrl) {
@@ -68,7 +68,7 @@ public class RedirectUrls {
     /**
      * You may overwrite the default cancel url of {@link PayPalConfig}.
      *
-     * @param cancelUrl
+     * @param cancelUrl the url published to PayPal for call-bac
      * @return this for chaining.
      */
     public RedirectUrls setCancelUrl(String cancelUrl) {
