@@ -8,7 +8,7 @@ public class Utils {
     /**
      * Ensures scale 2.
      *
-     * @param amount
+     * @param amount Round this amount.
      */
     public static BigDecimal roundAmount(BigDecimal amount) {
         if (amount == null) {
@@ -20,19 +20,21 @@ public class Utils {
     /**
      * Doesn't round.
      *
-     * @param value
-     * @param valuesToAdd If null, a will be returned.
+     * @param values
      * @return
      */
-    public static BigDecimal add(BigDecimal value, BigDecimal... valuesToAdd) {
-        if (valuesToAdd == null) {
-            return value;
+    public static BigDecimal add(BigDecimal... values) {
+        BigDecimal sum = null;
+        for (BigDecimal value : values) {
+            if (value != null) {
+                if (sum == null) {
+                    sum = value;
+                } else {
+                    sum = sum.add(value);
+                }
+            }
         }
-        for (BigDecimal valueToAdd : valuesToAdd) {
-            if (valueToAdd != null)
-                value = value.add(valueToAdd);
-        }
-        return value;
+        return sum;
     }
 
     public static String asString(BigDecimal amount) {

@@ -2,6 +2,8 @@ package de.micromata.paypal;
 
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class UtilsTest {
@@ -33,5 +35,13 @@ class UtilsTest {
         assertFalse(Utils.isNotBlank("    "));
         assertTrue(Utils.isNotBlank("."));
         assertTrue(Utils.isNotBlank("  d  "));
+    }
+
+    @Test
+    void addBigDecimalsTest() {
+        assertNull(null);
+        assertEquals("1", Utils.add(BigDecimal.ONE).toString());
+        assertEquals("1", Utils.add(BigDecimal.ZERO, null, BigDecimal.ONE).toString());
+        assertEquals("11", Utils.add(null, null, BigDecimal.ZERO, null, BigDecimal.ONE, BigDecimal.TEN).toString());
     }
 }
