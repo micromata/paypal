@@ -235,6 +235,8 @@ step:
 Payment payment = PayPalConnector.getPaymentDetails(config, paymentId);
 if (payment.getState() == State.CREATED) {
   // Redirect the user to PayPal's payment process.
+  String redirectUrl = payment.getPayPalApprovalUrl();
+  response.sendRedirect(redirectUrl);
 } else if (payment.getState() == State.APPROVED) {
   // Payment is approved by the user. If not yet executed, try to execute this payment (again):
   PayPalConnector.executePayment(config, paymentId, payerId);
