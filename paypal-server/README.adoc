@@ -1,5 +1,5 @@
-Micromata PayPal server
-=======================
+PayPal example server
+=====================
 Micromata GmbH, Kai Reinhard, Version {version}
 :toc:
 :toclevels: 4
