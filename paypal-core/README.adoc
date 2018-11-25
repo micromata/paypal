@@ -26,3 +26,8 @@ mavenPassword=<your maven password>
 
 Ensure that `GRADLE_USER_HOME` environment variable points to `~/.gradle`.
 
+
+==== Staging a release
+
+Refer https://central.sonatype.org/pages/releasing-the-deployment.html.
+
