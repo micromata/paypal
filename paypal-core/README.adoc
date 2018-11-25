@@ -32,6 +32,7 @@ Ensure that `GRADLE_USER_HOME` environment variable points to `~/.gradle`.
 Refer https://central.sonatype.org/pages/releasing-the-deployment.html.
 
 Check:
+
 1. Download snapshot and release artifacts from group https://oss.sonatype.org/content/groups/public/de/micromata/paypal/paypal-core
 2. Download snapshot, release and staged artifacts from staging group https://oss.sonatype.org/content/groups/staging/de/micromata/paypal/paypal-core
 
