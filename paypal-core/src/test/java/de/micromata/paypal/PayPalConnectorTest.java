@@ -39,7 +39,7 @@ public class PayPalConnectorTest {
         if (config == null) {
             return;
         }
-        //createPayment(config);
+        createPayment(config);
     }
 
     @Test
