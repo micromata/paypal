@@ -166,6 +166,31 @@ File configFile = new File(System.getProperty("user.home"), ".paypal");
 paypalConfig = new PayPalConfig().read(file);
 ----
 
+=== Including jar
+
+==== maven:
+
+[source,xml]
+.pom.xml
+----
+<dependency>
+  <groupId>de.micromata.paypal</groupId>
+  <artifactId>paypal-core</artifactId>
+  <version>0.1</version>
+</dependency>
+----
+
+==== gradle:
+.gradle.build
+----
+dependencies {
+    ...
+    compile group: 'de.micromata.paypal', name: 'paypal-core', version: '0.1'
+    ...
+}
+----
+
+
 === Java code for payments
 
 ==== Step 1: Create a payment
