@@ -25,8 +25,8 @@ public class PayPalConfig {
 
     private String clientId;
     private String clientSecret;
-    private String returnUrl;
-    private String cancelUrl;
+    private String returnUrl = DEMO_RETURN_URL; // For testing.
+    private String cancelUrl = DEMO_CANCEL_URL; // For testing.
     private String defaultPayment = "paypal";
     private Mode mode = Mode.SANDBOX;
     private String noWarrantyAcceptance;
