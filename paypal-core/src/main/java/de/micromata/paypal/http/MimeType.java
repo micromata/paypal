@@ -1,4 +1,4 @@
-package de.micromata.paypal;
+package de.micromata.paypal.http;
 
 public enum MimeType {
     JSON("application/json");

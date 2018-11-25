@@ -1,4 +1,4 @@
-package de.micromata.paypal;
+package de.micromata.paypal.http;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +9,7 @@ class HttpsCallRequestParamBuilderTest {
     @Test
     void builderTest() {
         String url = "http://www.acme.com/action";
-        HttpsCallRequestParamBuilder pb = new HttpsCallRequestParamBuilder();
+        QueryParamBuilder pb = new QueryParamBuilder();
         assertEquals(url, pb.createUrl(url));
         assertEquals(url + "?a=b", pb.createUrl(url + "?a=b"));
         pb.add("test", "");

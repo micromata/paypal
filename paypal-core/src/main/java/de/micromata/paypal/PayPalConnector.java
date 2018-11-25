@@ -3,6 +3,9 @@ package de.micromata.paypal;
 import de.micromata.paypal.data.AccessTokenResponse;
 import de.micromata.paypal.data.Payment;
 import de.micromata.paypal.data.Payments;
+import de.micromata.paypal.http.HttpsCall;
+import de.micromata.paypal.http.QueryParamBuilder;
+import de.micromata.paypal.http.MimeType;
 import de.micromata.paypal.json.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +77,7 @@ public class PayPalConnector {
             // /v1/payments/payment
             String url = getUrl(config, "/v1/payments/payment");
             log.info("Get payments: filter=" + JsonUtils.toJson(filter));
-            HttpsCallRequestParamBuilder pb = new HttpsCallRequestParamBuilder();
+            QueryParamBuilder pb = new QueryParamBuilder();
             pb.add("count", filter.getCount())
                     .add("start_id", filter.getStartId())
                     .add("start_index", filter.getStartIndex())

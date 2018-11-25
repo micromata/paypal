@@ -1,4 +1,4 @@
-package de.micromata.paypal;
+package de.micromata.paypal.http;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,13 +6,13 @@ import org.slf4j.LoggerFactory;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-public class HttpsCallRequestParamBuilder {
+public class QueryParamBuilder {
     private Logger log = LoggerFactory.getLogger(HttpsCall.class);
 
     private StringBuilder sb = new StringBuilder();
     private boolean first = true;
 
-    HttpsCallRequestParamBuilder add(String param, Object value) {
+    public QueryParamBuilder add(String param, Object value) {
         if (value == null) {
             return this;
         }
@@ -20,7 +20,7 @@ public class HttpsCallRequestParamBuilder {
     }
 
 
-    HttpsCallRequestParamBuilder add(String param, String value) {
+    public QueryParamBuilder add(String param, String value) {
         if (value == null || value.length() == 0) {
             return this;
         }

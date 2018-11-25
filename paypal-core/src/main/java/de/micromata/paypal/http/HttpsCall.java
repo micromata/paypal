@@ -1,4 +1,4 @@
-package de.micromata.paypal;
+package de.micromata.paypal.http;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
