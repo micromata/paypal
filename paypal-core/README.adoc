@@ -1,0 +1,28 @@
+PayPal core
+===========
+Micromata GmbH, Kai Reinhard, Version {version}
+:toc:
+:toclevels: 4
+
+:last-update-label: Copyright (C) 2018, Last updated
+
+ifdef::env-github,env-browser[:outfilesuffix: .adoc]
+
+== For developers
+
+=== Publishing to Maven Central
+
+==== Signing
+
+Create
+
+.~/.gradle/gradle.properties
+----
+signing.gnupg.keyName=<your key name / id>
+signing.gnupg.passphrase=<the key's passphrase>
+mavenUser=<your maven user name>
+mavenPassword=<your maven password>
+----
+
+Ensure that `GRADLE_USER_HOME` environment variable points to `~/.gradle`.
+
