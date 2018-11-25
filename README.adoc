@@ -243,9 +243,6 @@ if (payment.getState() == State.CREATED) {
 }
 ----
 
-
-
-== Miscellaneous
 anchor:get-access-token[]
 
 === Get an access token
@@ -263,13 +260,29 @@ The object `AccessTokenResponse` holds also the expire time. An AccessToken is i
 a new access token during this time you will receive the same token.
 
 
-=== Why do not use BrainSDK?
-The BrainSDK seems to be behind the API. I wasn't able to set the flag `NO_SHIPPING` and the BrainSDK doesn't care about
+== Miscellaneous
+
+
+=== Why do not use BrainTree SDK?
+The BrainTree SDK seems to be behind the API. I wasn't able to set the flag `NO_SHIPPING` and the BrainSDK doesn't care about
 any field restrictions (such as minimum and maximum field length or supported field values).
 
 If you miss some functionality feel free to extend this module. It's very easy to extend calls and POJOs.
 
 It took only less than an effort of one day to replace BrainSDK by an own implementation for the whole payment process.
+
+=== Why do not do the payment in our application?
+This integration let PayPal do the payment approval. The advantage of this approach is that you
+don't have to care about your customers credit cards etc. You never get any credit card or payment credentials from
+your customers. +
+The customers trust more in PayPal. Especially if your application is a new one, your customers maybe don't trust in your
+system and they don't want to enter their credit card number etc. in your application. +
+In Europe this approach is more friendly regarding the GDPR (General Data Protection Regulation) or the German DSGVO
+(Datenschutzgrundverordnung) established in 2018.
+
+If you want to embed the whole payment process inside your application later, simply use the BrainTree SDK because PayPal has some
+restrictions in its API when you don't use the BrainTree SDK.
+
 
 === Project dependencies
 This PayPal library is designed with a minimal set of dependencies for a light weight integration in your own app:
