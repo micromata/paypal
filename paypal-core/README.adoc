@@ -37,7 +37,8 @@ mavenUser=<your maven user name>
 mavenPassword=<your maven password>
 ----
 
-Ensure that `GRADLE_USER_HOME` environment variable points to `~/.gradle`.
+Ensure that `GRADLE_USER_HOME` environment variable points to `~/.gradle` and you key is published under
+http://pool.sks-keyservers.net:11371 and http://keys.gnupg.net:11371/
 
 
 ==== Staging a release
