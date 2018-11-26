@@ -8,9 +8,22 @@ Micromata GmbH, Kai Reinhard, Version {version}
 
 ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 
-== For developers
+== Documentation
+
+For documentation of this library please refer the README in the parent directory.
+
+== General information of how to publish to Maven central
 
 === Publishing to Maven Central
+
+This section describes in general how to publish to maven central any artifact.
+
+==== Creating an account for Sonatyp
+Create an account at https://oss.sonatype.org.
+
+==== Granting the account for your group
+
+Open a JIRA issue at https://issues.sonatype.org for project `OSSRH` and request the permissions.
 
 ==== Signing
 
@@ -35,5 +48,6 @@ Check:
 
 1. Download snapshot and release artifacts from group https://oss.sonatype.org/content/groups/public/de/micromata/paypal/paypal-core
 2. Download snapshot, release and staged artifacts from staging group https://oss.sonatype.org/content/groups/staging/de/micromata/paypal/paypal-core
-
+3. Check downloads
+4. Press Release button at the top.
 
