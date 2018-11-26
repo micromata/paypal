@@ -18,7 +18,7 @@ For documentation of this library please refer the README in the parent director
 
 This section describes in general how to publish to maven central any artifact.
 
-==== Creating an account for Sonatyp
+==== Creating an account for Sonatype
 Create an account at https://oss.sonatype.org.
 
 ==== Granting the account for your group
