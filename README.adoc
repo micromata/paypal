@@ -183,11 +183,7 @@ paypalConfig = new PayPalConfig().read(file);
 ==== gradle:
 .gradle.build
 ----
-dependencies {
-    ...
-    compile group: 'de.micromata.paypal', name: 'paypal-core', version: '0.1'
-    ...
-}
+  compile 'de.micromata.paypal:paypal-core:0.1'
 ----
 
 
