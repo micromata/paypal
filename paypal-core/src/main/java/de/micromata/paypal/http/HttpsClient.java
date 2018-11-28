@@ -48,6 +48,7 @@ public class HttpsClient {
 
     /**
      * Executes the https call. Use this method only for POST calls (POST calls need a body).
+     * @param body The body as post input.
      * @return The server's response.
      * @throws IOException If any IOException occurs while connecting the server.
      */

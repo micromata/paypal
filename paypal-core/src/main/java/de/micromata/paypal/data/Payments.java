@@ -3,7 +3,7 @@ package de.micromata.paypal.data;
 import java.util.List;
 
 /**
- * List of payments as response of call <tt>/v1/payments/payment</tt>
+ * List of payments as response of call <var>/v1/payments/payment</var>
  */
 public class Payments {
     private List<Payment> payments;
