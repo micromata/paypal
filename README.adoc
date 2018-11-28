@@ -176,14 +176,14 @@ paypalConfig = new PayPalConfig().read(file);
 <dependency>
   <groupId>de.micromata.paypal</groupId>
   <artifactId>paypal-core</artifactId>
-  <version>0.1</version>
+  <version>0.2</version>
 </dependency>
 ----
 
 ==== gradle:
 .gradle.build
 ----
-  compile 'de.micromata.paypal:paypal-core:0.1'
+  compile 'de.micromata.paypal:paypal-core:0.2'
 ----
 
 
