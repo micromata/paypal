@@ -21,6 +21,7 @@ public class JettyServer {
     public void start(PayPalConfig paypalConfig, int port) {
         log.info("Starting web server on port " + port);
         PaymentReceiveServlet.setConfig(paypalConfig);
+        PaymentExecuteServlet.setConfig(paypalConfig);
         PaymentCancelServlet.setConfig(paypalConfig);
         PaymentTestServlet.setPaypalConfig(paypalConfig);
         server = new Server(port);
@@ -54,6 +55,7 @@ public class JettyServer {
         ctx.setInitParameter(DefaultServlet.CONTEXT_INIT + "useFileMappedBuffer", "false");
         ctx.addServlet(DefaultServlet.class, "/");
         ctx.addServlet(PaymentReceiveServlet.class, "/receivePayment");
+        ctx.addServlet(PaymentExecuteServlet.class, "/executePayment");
         ctx.addServlet(PaymentCancelServlet.class, "/cancelPayment");
         ctx.addServlet(PaymentTestServlet.class, "/testPayment");
 

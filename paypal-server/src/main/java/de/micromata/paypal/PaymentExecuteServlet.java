@@ -1,5 +1,7 @@
 package de.micromata.paypal;
 
+import de.micromata.paypal.data.Payment;
+import de.micromata.paypal.json.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,13 +20,13 @@ import java.io.IOException;
  * <br/>
  * After executing this payment, we have the money!
  */
-public class PaymentReceiveServlet extends HttpServlet {
-    private static Logger log = LoggerFactory.getLogger(PaymentReceiveServlet.class);
+public class PaymentExecuteServlet extends HttpServlet {
+    private static Logger log = LoggerFactory.getLogger(PaymentExecuteServlet.class);
 
     private static PayPalConfig config;
 
     public static void setConfig(PayPalConfig config) {
-        PaymentReceiveServlet.config = config;
+        PaymentExecuteServlet.config = config;
     }
 
     @Override
@@ -37,8 +39,25 @@ public class PaymentReceiveServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String paymentId = req.getParameter("paymentId");
-        String payerId = req.getParameter("PayerID");
+        UserFakeSession session = UserFakeSessionHandler.getInstance().getSession(req.getRemoteAddr());
+        String paymentId = session.paymentId;
+        String payerId = session.payerId;
+        try {
+            executePayment(req, resp, paymentId, payerId);
+        } catch (PayPalRestException ex) {
+            log.error("Error while executing payment: " + ex.getMessage(), ex);
+        }
+    }
+
+    /**
+     * Override this method for own code for executing payments.
+     *
+     * @param req
+     * @param resp
+     * @param paymentId
+     * @param payerId
+     */
+    protected void executePayment(HttpServletRequest req, HttpServletResponse resp, String paymentId, String payerId) throws IOException, PayPalRestException {
         log.info("Payment received: paymentId=" + paymentId + ", PayerID=" + payerId);
         if (Utils.isBlank(paymentId)) {
             log.error("Can't execute payment, paymentId not given. Aborting payment...");
@@ -50,9 +69,14 @@ public class PaymentReceiveServlet extends HttpServlet {
             redirectToErrorPage(resp);
             return;
         }
-        UserFakeSessionHandler.getInstance().store(req.getRemoteAddr(), new UserFakeSession(paymentId, payerId));
-        resp.setStatus(302);
-        resp.setHeader("Location", "/paymentConfirm.html");
+        Payment paymentExecuted = PayPalConnector.executePayment(config, paymentId, payerId);
+        if (paymentExecuted != null) {
+            log.info("Payment executed: " + JsonUtils.toJson(paymentExecuted));
+            resp.setStatus(302);
+            resp.setHeader("Location", "/paymentExecuted.html");
+            return;
+        }
+        redirectToErrorPage(resp);
     }
 
     private void redirectToErrorPage(HttpServletResponse resp) {
