@@ -3,9 +3,9 @@ package de.micromata.paypal;
 import de.micromata.paypal.data.AccessTokenResponse;
 import de.micromata.paypal.data.Payment;
 import de.micromata.paypal.data.Payments;
-import de.micromata.paypal.http.HttpsCall;
-import de.micromata.paypal.http.QueryParamBuilder;
+import de.micromata.paypal.http.HttpsClient;
 import de.micromata.paypal.http.MimeType;
+import de.micromata.paypal.http.QueryParamBuilder;
 import de.micromata.paypal.json.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -147,9 +147,9 @@ public class PayPalConnector {
     public static AccessTokenResponse getAccessToken(PayPalConfig config) throws PayPalRestException {
         try {
             String url = getUrl(config, "/v1/oauth2/token");
-            HttpsCall call = new HttpsCall().setAcceptLanguage("en_US").setAccept(MimeType.JSON);
-            call.setUserPasswordAuthorization(config.getClientId() + ":" + config.getClientSecret());
-            String response = call.post(url, "grant_type=client_credentials");
+            HttpsClient httpsClient = new HttpsClient(url, HttpsClient.Mode.POST).setAcceptLanguage("en_US").setAccept(MimeType.JSON);
+            httpsClient.setUserPasswordAuthorization(config.getClientId() + ":" + config.getClientSecret());
+            String response = httpsClient.send("grant_type=client_credentials");
             AccessTokenResponse accessTokenResponse = JsonUtils.fromJson(AccessTokenResponse.class, response);
             accessTokenResponse.setOrigninalPayPalResponse(response);
             return accessTokenResponse;
@@ -159,14 +159,14 @@ public class PayPalConnector {
     }
 
 
-    private static String doPostCall(PayPalConfig config, String url, String payload) throws IOException, MalformedURLException {
-        return doPostCall(config, url, payload, null);
+    private static String doPostCall(PayPalConfig config, String url, String body) throws IOException, MalformedURLException {
+        return doPostCall(config, url, body, null);
     }
 
-    private static String doPostCall(PayPalConfig config, String url, String payload, String accessToken) throws IOException, MalformedURLException {
-        HttpsCall call = createCallObject(config, accessToken);
-        call.setContentType(MimeType.JSON);
-        return call.post(url, payload);
+    private static String doPostCall(PayPalConfig config, String url, String body, String accessToken) throws IOException, MalformedURLException {
+        HttpsClient httpsClient = createHttpsClient(config, accessToken, url, HttpsClient.Mode.POST);
+        httpsClient.setContentType(MimeType.JSON);
+        return httpsClient.send(body);
     }
 
     private static String doGetCall(PayPalConfig config, String url) throws IOException, MalformedURLException {
@@ -174,18 +174,18 @@ public class PayPalConnector {
     }
 
     private static String doGetCall(PayPalConfig config, String url, String accessToken) throws IOException, MalformedURLException {
-        HttpsCall call = createCallObject(config, accessToken);
-        return call.get(url);
+        HttpsClient httpsClient = createHttpsClient(config, accessToken, url, HttpsClient.Mode.GET);
+        return httpsClient.send();
     }
 
-    private static HttpsCall createCallObject(PayPalConfig config, String accessToken) {
-        HttpsCall call = new HttpsCall().setAcceptLanguage("en_US").setAccept(MimeType.JSON);
+    private static HttpsClient createHttpsClient(PayPalConfig config, String accessToken, String url, HttpsClient.Mode mode) {
+        HttpsClient httpsClient = new HttpsClient(url, mode).setAcceptLanguage("en_US").setAccept(MimeType.JSON);
         if (accessToken != null) {
-            call.setBearerAuthorization(accessToken);
+            httpsClient.setBearerAuthorization(accessToken);
         } else {
-            call.setUserPasswordAuthorization(config.getClientId() + ":" + config.getClientSecret());
+            httpsClient.setUserPasswordAuthorization(config.getClientId() + ":" + config.getClientSecret());
         }
-        return call;
+        return httpsClient;
     }
 
     private static String getUrl(PayPalConfig config, String url) {

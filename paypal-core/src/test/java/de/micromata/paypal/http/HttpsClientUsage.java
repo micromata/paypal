@@ -1,7 +1,5 @@
 package de.micromata.paypal.http;
 
-import org.junit.Test;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,11 +8,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class ClientUsage
+public class HttpsClientUsage
 {
   private String url = "https://www.google.de";
   int loops = 100;
-  HttpsClient client = new HttpsClient(url, false);
+  HttpsClient client = new HttpsClient(url, HttpsClient.Mode.GET);
 
   static {
     MySSLSocketTestFactory.init();
@@ -29,19 +27,19 @@ public class ClientUsage
     //    return c;
   }
 
-  @Test
+  //@Test
   public void singleThreaded() throws IOException
   {
     MySSLSocketTestFactory.resetSocketCreated();
     long start = System.currentTimeMillis();
     for (int i = 0; i < loops; ++i) {
-      String res = getClient().send("PING");
+      String res = getClient().send();
     }
     System.out.println("Non-Threaded: " + (System.currentTimeMillis() - start));
     System.out.println("Sockets: " + MySSLSocketTestFactory.getSocketCreated());
   }
 
-  @Test
+  //@Test
   public void multiThreaded() throws IOException
   {
 
@@ -55,7 +53,7 @@ public class ClientUsage
         public void run()
         {
           try {
-            String res = getClient().send("PING");
+            String res = getClient().send();
           } catch (IOException e) {
             e.printStackTrace();
           }
@@ -75,7 +73,7 @@ public class ClientUsage
     System.out.println("Sockets: " + MySSLSocketTestFactory.getSocketCreated());
   }
 
-  @Test
+  //@Test
   public void multiThreadedSequenced() throws IOException
   {
 
@@ -89,7 +87,7 @@ public class ClientUsage
           public void run()
           {
             try {
-              String res = getClient().send("PING");
+              String res = getClient().send();
             } catch (IOException e) {
               e.printStackTrace();
             }
@@ -105,13 +103,14 @@ public class ClientUsage
     System.out.println("Sockets: " + MySSLSocketTestFactory.getSocketCreated());
   }
 
+  //@Test
   public void pooled() throws IOException
   {
     ExecutorService executor = Executors.newFixedThreadPool(10);
     long start = System.currentTimeMillis();
     List<Future<String>> taskList = new ArrayList<>();
     for (int i = 0; i < loops; ++i) {
-      taskList.add(executor.submit(() -> getClient().send("PING")));
+      taskList.add(executor.submit(() -> getClient().send()));
     }
     try {
       for (Future<String> f : taskList) {

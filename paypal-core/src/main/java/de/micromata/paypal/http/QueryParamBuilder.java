@@ -7,7 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 public class QueryParamBuilder {
-    private Logger log = LoggerFactory.getLogger(HttpsCall.class);
+    private Logger log = LoggerFactory.getLogger(QueryParamBuilder.class);
 
     private StringBuilder sb = new StringBuilder();
     private boolean first = true;
