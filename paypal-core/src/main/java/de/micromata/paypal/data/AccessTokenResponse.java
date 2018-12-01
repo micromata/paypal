@@ -14,7 +14,7 @@ public class AccessTokenResponse {
     private String scope, nonce, accessToken, tokenType, appId;
     private int expiresInNotUpdated;
     private long created;
-    private String origninalPayPalResponse;
+    private String originalPayPalResponse;
 
     public AccessTokenResponse() {
         created = System.currentTimeMillis() / 1000;
@@ -101,11 +101,20 @@ public class AccessTokenResponse {
     /**
      * @return the original response from PayPal. This object is generated from this json string.
      */
-    public String getOrigninalPayPalResponse() {
-        return origninalPayPalResponse;
+    public String getOriginalPayPalResponse() {
+        return originalPayPalResponse;
     }
 
-    public void setOrigninalPayPalResponse(String origninalPayPalResponse) {
-        this.origninalPayPalResponse = origninalPayPalResponse;
+    public void setOriginalPayPalResponse(String originalPayPalResponse) {
+        this.originalPayPalResponse = originalPayPalResponse;
+    }
+
+    /**
+     * This was a type, please use {@link #getOriginalPayPalResponse()} instead.
+     * @return
+     */
+    @Deprecated
+    public String getOrigninalPayPalResponse() {
+        return this.originalPayPalResponse;
     }
 }

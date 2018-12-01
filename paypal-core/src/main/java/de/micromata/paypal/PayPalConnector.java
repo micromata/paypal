@@ -39,7 +39,7 @@ public class PayPalConnector {
             if (paymentCreated == null) {
                 throw new PayPalRestException("Error while creating payment: " + response);
             }
-            paymentCreated.setOrigninalPayPalResponse(response);
+            paymentCreated.setOriginalPayPalResponse(response);
             log.info("Created execution payment: " + JsonUtils.toJson(paymentCreated));
             return paymentCreated;
         } catch (Exception ex) {
@@ -119,7 +119,7 @@ public class PayPalConnector {
             if (approval == null) {
                 throw new PayPalRestException("Error while creating payment: " + response);
             }
-            approval.setOrigninalPayPalResponse(response);
+            approval.setOriginalPayPalResponse(response);
             log.info("Payment approved: " + JsonUtils.toJson(approval));
             return approval;
         } catch (Exception ex) {
@@ -151,7 +151,7 @@ public class PayPalConnector {
             httpsClient.setUserPasswordAuthorization(config.getClientId() + ":" + config.getClientSecret());
             String response = httpsClient.send("grant_type=client_credentials");
             AccessTokenResponse accessTokenResponse = JsonUtils.fromJson(AccessTokenResponse.class, response);
-            accessTokenResponse.setOrigninalPayPalResponse(response);
+            accessTokenResponse.setOriginalPayPalResponse(response);
             return accessTokenResponse;
         } catch (Exception ex) {
             throw new PayPalRestException("Error while getting access token: " + ex.getMessage(), ex);

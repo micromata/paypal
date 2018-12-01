@@ -21,7 +21,7 @@ public class Payment {
     private ApplicationContext applicationContext;
     private RedirectUrls redirectUrls = new RedirectUrls();
     private List<Link> links;
-    private String origninalPayPalResponse;
+    private String originalPayPalResponse;
 
     public Payment() {
     }
@@ -162,12 +162,12 @@ public class Payment {
     /**
      * @return the original response from PayPal. This object is generated from this json string.
      */
-    public String getOrigninalPayPalResponse() {
-        return origninalPayPalResponse;
+    public String getOriginalPayPalResponse() {
+        return originalPayPalResponse;
     }
 
-    public void setOrigninalPayPalResponse(String origninalPayPalResponse) {
-        this.origninalPayPalResponse = origninalPayPalResponse;
+    public void setOriginalPayPalResponse(String originalPayPalResponse) {
+        this.originalPayPalResponse = originalPayPalResponse;
     }
 
     /**
@@ -196,5 +196,14 @@ public class Payment {
     @JsonProperty(value = "experience_profile_id")
     public String getExperienceProfileId() {
         return experienceProfileId;
+    }
+
+    /**
+     * This was a type, please use {@link #getOriginalPayPalResponse()} instead.
+     * @return
+     */
+    @Deprecated
+    public String getOrigninalPayPalResponse() {
+        return this.originalPayPalResponse;
     }
 }
