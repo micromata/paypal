@@ -200,6 +200,8 @@ payment.setNoteToPayer("Please contact ...");            // Note to payer for im
 payment.setShipping(ShippingPreference.NO_SHIPPING);     // Don't prompt the user for a shipping address.
 // Do the PayPal call and see the returned PaymentExecution object:
 Payment paymentCreated = PayPalConnector.createPayment(paypalConfig, payment);
+// You should save PayPal's original response json object e. g. in your database:
+database.save(paymentCreated.getOriginalPayPalResponse()); // optional but recommended.
 if (paymentCreated != null) {
   String redirectUrl = paymentCreated.getPayPalUrlForUserPayment();
   response.sendRedirect(redirectUrl);                    // Redirect the user to the PayPal site.
@@ -229,6 +231,8 @@ String paymentId = request.getParameter("paymentId"); // Request parameter given
 String payerId = request.getParameter("PayerID");
 Payment paymentExecuted = PayPalConnector.executePayment(config, paymentId, payerId);
 if (paymentExecuted != null) {
+  // You should save PayPal's original response json object e. g. in your database:
+  database.save(paymentCreated.getOriginalPayPalResponse()); // optional but recommended.
   // paymentExecuted contains all information related to the PayPal payment:
   // payer, transaction, items, amounts, refund urls, time stamps etc.
 }
