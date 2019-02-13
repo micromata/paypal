@@ -298,7 +298,7 @@ If you miss some functionality feel free to extend this module. It's very easy t
 
 It took only less than an effort of one day to replace BrainSDK by an own implementation for the whole payment process.
 
-=== Why do not do the payment in our application?
+=== Why not do the payment in our application?
 This integration let PayPal do the payment approval. The advantage of this approach is that you
 don't have to care about your customers credit cards etc. You never get any credit card or payment credentials from
 your customers. +
